@@ -14,8 +14,18 @@ It can handle all providers without specifying network, assets or file, just use
 
 ## Example usage:
 
+- Assets provider
 ```
-Assets provider: UniversalImage('assets/image.png')
-File provider: UniversalImage('/user/app/image.png')
-Network provider: UniversalImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')
+UniversalImage('assets/image.png',
+    fit: BoxFit.cover,)
+```
+
+- File provider:
+```
+UniversalImage('/com.package.app/files/image.png', fit: BoxFit.cover,)
+```
+
+- Network provider:
+```
+UniversalImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')
 ```
