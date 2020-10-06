@@ -1,5 +1,6 @@
 # universal_image
 [![pub package](https://img.shields.io/pub/v/universal_image.svg)](https://pub.dartlang.org/packages/universal_image)
+
 A universal image package to display all image types for all platforms (mobile, desktop and web)
 
 ## General
@@ -95,3 +96,10 @@ var image = UniversalImage(
       svgSkiaMode: false,
     );
 ```
+
+## License
+
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/ductranit/flutter_universal_image/blob/master/LICENSE)
+
+A permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.
+
