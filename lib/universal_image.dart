@@ -47,6 +47,7 @@ class UniversalImage extends StatelessWidget {
     this.cacheWidth,
     this.cacheHeight,
     this.allowDrawingOutsideViewBox = false,
+    this.svgSkiaMode = false,
   }) : super(key: key);
 
   final AlignmentGeometry alignment;
@@ -73,6 +74,7 @@ class UniversalImage extends StatelessWidget {
   final double scale;
   final String semanticLabel;
   final double width;
+  final bool svgSkiaMode;
 
   bool get _isNetwork => imageUri.startsWith('http');
 
@@ -82,11 +84,11 @@ class UniversalImage extends StatelessWidget {
 
   /// Create svg image widget.
   ///
-  /// For web, it uses [Image](https://api.flutter.dev/flutter/widgets/Image-class.html)
+  /// For web (without skia enable), it uses [Image](https://api.flutter.dev/flutter/widgets/Image-class.html)
   ///
-  /// Other platforms, uses [flutter_svg](https://pub.dev/packages/flutter_svg)
+  /// Otherwise it uses [flutter_svg](https://pub.dev/packages/flutter_svg)
   Widget _createSvgImage() {
-    if (kIsWeb) {
+    if (kIsWeb && !svgSkiaMode) {
       if (_isAsset) {
         return Image.asset(
           imageUri,
