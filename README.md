@@ -1,5 +1,5 @@
 # universal_image
-
+[![pub package](https://img.shields.io/pub/v/universal_image.svg)](https://pub.dartlang.org/packages/universal_image)
 A universal image package to display all image types for all platforms (mobile, desktop and web)
 
 ## General
