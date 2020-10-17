@@ -1,22 +1,32 @@
 library universal_image;
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:extended_image/extended_image.dart';
+import 'dart:convert';
 
 /// The prefix of icon uri
 final String _iconUriPrefix = 'icons://';
+
+/// The prefix of memory data
+final String _memoryUriPrefix = 'base64://';
 
 extension $IconData on IconData {
   /// Convert icon into uri to work with UniversalImage
   ///
   /// Example. `Icons.add.uri`
   String get uri =>
-      '${_iconUriPrefix}${codePoint}/${fontFamily}/${fontPackage}/${matchTextDirection}';
+      '$_iconUriPrefix$codePoint/$fontFamily/$fontPackage/$matchTextDirection';
+}
+
+extension $Uint8List on Uint8List {
+  /// Convert bytes array into uri
+  String get uri => '$_memoryUriPrefix${base64Encode(this)}';
 }
 
 /// A widget to display all image types for all platforms.
@@ -29,7 +39,7 @@ extension $IconData on IconData {
 ///
 /// It can handle all providers without specifying network, assets or file, just use `imageUri`
 ///
-/// It can work with Icons font
+/// It can work with Icons font & memory image as well
 ///
 /// Example:
 ///
@@ -40,6 +50,8 @@ extension $IconData on IconData {
 /// `Network provider`: `UniversalImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')`
 ///
 /// `Icon provider`: `UniversalImage(Icons.add.uri)`
+///
+/// `Memory provider`: `UniversalImage('base64://base64string')`
 class UniversalImage extends StatelessWidget {
   const UniversalImage(
     this.imageUri, {
@@ -108,6 +120,8 @@ class UniversalImage extends StatelessWidget {
   bool get _isSvg => imageUri.endsWith('.svg');
 
   bool get _isIcon => imageUri.startsWith(_iconUriPrefix);
+
+  bool get _isMemory => imageUri.startsWith(_memoryUriPrefix);
 
   /// Create svg image widget.
   ///
@@ -315,10 +329,39 @@ class UniversalImage extends StatelessWidget {
     );
   }
 
+  Widget _createMemoryImage() {
+    var data = imageUri.replaceAll(_memoryUriPrefix, ''); // remove prefix
+    var bytes = base64Decode(data);
+    return Image.memory(
+      bytes,
+      key: key,
+      fit: fit,
+      scale: scale,
+      color: color,
+      width: width,
+      height: height,
+      alignment: alignment,
+      filterQuality: filterQuality,
+      colorBlendMode: colorBlendMode,
+      isAntiAlias: isAntiAlias,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isIcon) return _createIconImage();
     if (_isSvg) return _createSvgImage();
+    if (_isMemory) return _createMemoryImage();
     return _createOtherImage();
   }
 }

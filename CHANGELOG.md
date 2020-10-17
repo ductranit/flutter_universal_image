@@ -8,3 +8,6 @@
 
 ## [0.0.3] - add Icon provider
 * Support Icon font image
+
+## [0.0.4] - add memory provider
+* Support memory image from Uint8List
