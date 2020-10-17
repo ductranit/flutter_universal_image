@@ -1,10 +1,22 @@
 library universal_image;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:universal_io/io.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:extended_image/extended_image.dart';
+
+/// The prefix of icon uri
+final String _iconUriPrefix = 'icons://';
+
+extension $IconData on IconData {
+  /// Convert icon into uri to work with UniversalImage
+  ///
+  /// Example. `Icons.add.uri`
+  String get uri =>
+      '${_iconUriPrefix}${codePoint}/${fontFamily}/${fontPackage}/${matchTextDirection}';
+}
 
 /// A widget to display all image types for all platforms.
 ///
@@ -16,6 +28,8 @@ import 'package:extended_image/extended_image.dart';
 ///
 /// It can handle all providers without specifying network, assets or file, just use `imageUri`
 ///
+/// It can work with Icons font
+///
 /// Example:
 ///
 /// `Assets provider`: `UniversalImage('assets/image.png')`
@@ -23,6 +37,8 @@ import 'package:extended_image/extended_image.dart';
 /// `File provider`: `UniversalImage('/user/app/image.png')`
 ///
 /// `Network provider`: `UniversalImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')`
+///
+/// `Icon provider`: `UniversalImage(Icons.add.uri)`
 class UniversalImage extends StatelessWidget {
   const UniversalImage(
     this.imageUri, {
@@ -48,6 +64,8 @@ class UniversalImage extends StatelessWidget {
     this.cacheHeight,
     this.allowDrawingOutsideViewBox = false,
     this.svgSkiaMode = false,
+    this.size,
+    this.textDirection,
   }) : super(key: key);
 
   final AlignmentGeometry alignment;
@@ -76,11 +94,19 @@ class UniversalImage extends StatelessWidget {
   final double width;
   final bool svgSkiaMode;
 
+  /// For Icon only
+  final double size;
+
+  /// For Icon only
+  final TextDirection textDirection;
+
   bool get _isNetwork => imageUri.startsWith('http');
 
   bool get _isAsset => imageUri.startsWith('assets');
 
   bool get _isSvg => imageUri.endsWith('.svg');
+
+  bool get _isIcon => imageUri.startsWith(_iconUriPrefix);
 
   /// Create svg image widget.
   ///
@@ -287,8 +313,31 @@ class UniversalImage extends StatelessWidget {
     );
   }
 
+  Widget _createIconImage() {
+    var data = imageUri.replaceAll(_iconUriPrefix, ''); // remove prefix
+    var tokens = data.split('/');
+    var codePoint = int.parse(tokens[0]); // the first part must be int data
+    var fontFamily = tokens.length > 1 ? tokens[1] : null;
+    var fontPackage = tokens.length > 2 ? tokens[2] : null;
+    var matchTextDirection =
+        tokens.length > 3 ? (tokens[3]?.toLowerCase() == 'true') : false;
+
+    return Icon(
+      IconData(
+        codePoint,
+        fontFamily: fontFamily,
+        fontPackage: fontPackage,
+        matchTextDirection: matchTextDirection,
+      ),
+      size: size,
+      color: color,
+      textDirection: textDirection,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_isIcon) return _createIconImage();
     if (_isSvg) return _createSvgImage();
     return _createOtherImage();
   }

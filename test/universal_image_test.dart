@@ -29,6 +29,15 @@ void main() {
       allowDrawingOutsideViewBox: false,
       svgSkiaMode: false,
     );
-    expect(() => widget.imageUri, throwsNoSuchMethodError);
+
+    expect(widget.imageUri != null, true);
+
+    var iconWidget = UniversalImage(
+      Icons.add.uri,
+      color: Colors.red,
+      textDirection: TextDirection.ltr,
+    );
+
+    expect(iconWidget.imageUri != null, true);
   });
 }

@@ -9,6 +9,7 @@ A universal image package to display all image types for all platforms (mobile, 
 - For `SVG`, it uses [flutter_svg](https://pub.dev/packages/flutter_svg)
 - It also supports caching image with [extended_image](https://pub.dev/packages/extended_image)
 - It can handle all providers without specifying network, assets or file, just use `imageUri`
+- It can work with Icons font
 - Notice that it doesn't support [Image.memory()](https://api.flutter.dev/flutter/widgets/Image/Image.memory.html)
 
 ## Example usage:
@@ -94,6 +95,16 @@ var image = UniversalImage(
       cacheHeight: 100,
       allowDrawingOutsideViewBox: false,
       svgSkiaMode: false,
+    );
+```
+
+- Icon provider:
+```
+var image = UniversalImage(
+      Icons.add.uri,
+      color: Colors.black,
+      size: 30,
+      textDirection: TextDirection.ltr
     );
 ```
 
