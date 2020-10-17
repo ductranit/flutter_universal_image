@@ -1,9 +1,10 @@
 library universal_image;
 
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:universal_io/io.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:extended_image/extended_image.dart';
 
@@ -115,33 +116,8 @@ class UniversalImage extends StatelessWidget {
   /// Otherwise it uses [flutter_svg](https://pub.dev/packages/flutter_svg)
   Widget _createSvgImage() {
     if (kIsWeb && !svgSkiaMode) {
-      if (_isAsset) {
-        return Image.asset(
-          imageUri,
-          key: key,
-          fit: fit,
-          scale: scale,
-          color: color,
-          width: width,
-          height: height,
-          alignment: alignment,
-          filterQuality: filterQuality,
-          colorBlendMode: colorBlendMode,
-          isAntiAlias: isAntiAlias,
-          repeat: repeat,
-          centerSlice: centerSlice,
-          frameBuilder: frameBuilder,
-          errorBuilder: errorBuilder,
-          semanticLabel: semanticLabel,
-          excludeFromSemantics: excludeFromSemantics,
-          matchTextDirection: matchTextDirection,
-          gaplessPlayback: gaplessPlayback,
-          cacheWidth: cacheWidth,
-          cacheHeight: cacheHeight,
-        );
-      }
-
-      if (_isNetwork) {
+      // Use `Image.network()` for both network and asset svg
+      if (_isAsset || _isNetwork) {
         return Image.network(
           imageUri,
           key: key,
@@ -317,8 +293,12 @@ class UniversalImage extends StatelessWidget {
     var data = imageUri.replaceAll(_iconUriPrefix, ''); // remove prefix
     var tokens = data.split('/');
     var codePoint = int.parse(tokens[0]); // the first part must be int data
-    var fontFamily = tokens.length > 1 ? tokens[1] : null;
-    var fontPackage = tokens.length > 2 ? tokens[2] : null;
+    var fontFamily = tokens.length > 1
+        ? (tokens[1]?.toLowerCase() == 'null' ? null : tokens[1])
+        : null;
+    var fontPackage = tokens.length > 2
+        ? (tokens[2]?.toLowerCase() == 'null' ? null : tokens[2])
+        : null;
     var matchTextDirection =
         tokens.length > 3 ? (tokens[3]?.toLowerCase() == 'true') : false;
 
