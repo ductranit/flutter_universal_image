@@ -261,7 +261,17 @@ class UniversalImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight,
-        loadStateChanged: placeholder != null ? (state) => placeholder : null,
+        loadStateChanged: placeholder != null
+            ? (ExtendedImageState state) {
+                switch (state.extendedImageLoadState) {
+                  case LoadState.loading:
+                  case LoadState.failed:
+                    return placeholder;
+                  default:
+                    return null;
+                }
+              }
+            : null,
       );
     }
 
@@ -286,7 +296,17 @@ class UniversalImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight,
-        loadStateChanged: placeholder != null ? (state) => placeholder : null,
+        loadStateChanged: placeholder != null
+            ? (ExtendedImageState state) {
+                switch (state.extendedImageLoadState) {
+                  case LoadState.loading:
+                  case LoadState.failed:
+                    return placeholder;
+                  default:
+                    return null;
+                }
+              }
+            : null,
       );
     }
 
@@ -310,7 +330,17 @@ class UniversalImage extends StatelessWidget {
       gaplessPlayback: gaplessPlayback,
       cacheWidth: cacheWidth,
       cacheHeight: cacheHeight,
-      loadStateChanged: placeholder != null ? (state) => placeholder : null,
+      loadStateChanged: placeholder != null
+          ? (ExtendedImageState state) {
+              switch (state.extendedImageLoadState) {
+                case LoadState.loading:
+                case LoadState.failed:
+                  return placeholder;
+                default:
+                  return null;
+              }
+            }
+          : null,
     );
   }
 

@@ -14,3 +14,6 @@
 
 ## [0.0.5] - add placeholder
 * Add placeholder for flutter svg and extended image
+
+## [0.0.6] - fix placeholder issue
+* Correct placeholder for extended image
