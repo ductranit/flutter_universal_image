@@ -11,3 +11,6 @@
 
 ## [0.0.4] - add memory provider
 * Support memory image from Uint8List
+
+## [0.0.5] - add placeholder
+* Add placeholder for flutter svg and extended image

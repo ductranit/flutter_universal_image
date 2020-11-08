@@ -64,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
+                placeholder: Container(),
               ),
 
               FutureBuilder<String>(

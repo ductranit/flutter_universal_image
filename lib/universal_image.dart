@@ -79,6 +79,7 @@ class UniversalImage extends StatelessWidget {
     this.svgSkiaMode = false,
     this.size,
     this.textDirection,
+    this.placeholder,
   }) : super(key: key);
 
   final AlignmentGeometry alignment;
@@ -95,6 +96,7 @@ class UniversalImage extends StatelessWidget {
   final ImageFrameBuilder frameBuilder;
   final bool gaplessPlayback;
   final double height;
+  final Widget placeholder;
 
   /// Image uri, it can be http url, assets file path (assets path must start with `assets`) or local file
   final String imageUri;
@@ -195,6 +197,8 @@ class UniversalImage extends StatelessWidget {
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+        placeholderBuilder:
+            placeholder != null ? (BuildContext context) => placeholder : null,
       );
     }
 
@@ -211,6 +215,8 @@ class UniversalImage extends StatelessWidget {
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+        placeholderBuilder:
+            placeholder != null ? (BuildContext context) => placeholder : null,
       );
     }
 
@@ -226,6 +232,8 @@ class UniversalImage extends StatelessWidget {
       excludeFromSemantics: excludeFromSemantics,
       matchTextDirection: matchTextDirection,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+      placeholderBuilder:
+          placeholder != null ? (BuildContext context) => placeholder : null,
     );
   }
 
@@ -253,6 +261,7 @@ class UniversalImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight,
+        loadStateChanged: placeholder != null ? (state) => placeholder : null,
       );
     }
 
@@ -277,6 +286,7 @@ class UniversalImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight,
+        loadStateChanged: placeholder != null ? (state) => placeholder : null,
       );
     }
 
@@ -300,6 +310,7 @@ class UniversalImage extends StatelessWidget {
       gaplessPlayback: gaplessPlayback,
       cacheWidth: cacheWidth,
       cacheHeight: cacheHeight,
+      loadStateChanged: placeholder != null ? (state) => placeholder : null,
     );
   }
 

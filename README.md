@@ -37,6 +37,7 @@ A universal image package to display all image types for all platforms (mobile, 
       cacheWidth: 100,
       cacheHeight: 100,
       allowDrawingOutsideViewBox: false,
+      placeholder: Container(),
       svgSkiaMode: true, // using flutter_svg on web, make sure building with FLUTTER_WEB_USE_SKIA=true
     );
 ```
@@ -66,6 +67,7 @@ var image = UniversalImage(
       cacheHeight: 100,
       allowDrawingOutsideViewBox: false,
       svgSkiaMode: false,
+      placeholder: Container(),
     );
 ```
 
@@ -94,6 +96,7 @@ var image = UniversalImage(
       cacheHeight: 100,
       allowDrawingOutsideViewBox: false,
       svgSkiaMode: false,
+      placeholder: Container(),
     );
 ```
 
