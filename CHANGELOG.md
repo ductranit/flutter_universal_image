@@ -17,3 +17,6 @@
 
 ## [0.0.6] - fix placeholder issue
 * Correct placeholder for extended image
+
+## [0.0.6+1] - Update extended_image
+* Update extended_image to fix build issue on flutter master
