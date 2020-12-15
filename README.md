@@ -11,6 +11,9 @@ A universal image package to display all image types for all platforms (mobile, 
 - It can handle all providers without specifying network, assets or file, just use `imageUri`
 - It can work with Icons font & memory image as well
 
+## Notice:
+- To build release on macos, make sure disable tree shake icons by this command `flutter build macos --no-tree-shake-icons`
+
 ## Example usage:
 
 - Assets provider

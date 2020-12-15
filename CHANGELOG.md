@@ -20,3 +20,6 @@
 
 ## [0.0.6+1] - Update extended_image
 * Update extended_image to fix build issue on flutter master
+
+## [0.0.6+2] - Update extended_image
+* Increase extended_image dev version
