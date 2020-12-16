@@ -23,3 +23,6 @@
 
 ## [0.0.6+2] - Update extended_image
 * Increase extended_image dev version
+
+## [0.0.6+3] - Update extended_image
+* Correct extended_image dev version
