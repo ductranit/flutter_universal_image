@@ -26,3 +26,6 @@
 
 ## [0.0.6+3] - Update extended_image
 * Correct extended_image dev version
+
+## [0.0.6+4] - Add clear cache
+* Add clear cache method

@@ -405,4 +405,10 @@ class UniversalImage extends StatelessWidget {
     if (_isMemory) return _createMemoryImage();
     return _createOtherImage();
   }
+
+  /// Clear cache from memory and disk
+  static void clearCache() {
+    clearMemoryImageCache();
+    clearDiskCachedImages();
+  }
 }
