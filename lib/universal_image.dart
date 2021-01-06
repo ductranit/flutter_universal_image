@@ -80,6 +80,11 @@ class UniversalImage extends StatelessWidget {
     this.size,
     this.textDirection,
     this.placeholder,
+    this.errorPlaceholder,
+    this.cache = true,
+    this.enableMemoryCache = true,
+    this.clearMemoryCacheIfFailed = true,
+    this.clearMemoryCacheWhenDispose = false,
   }) : super(key: key);
 
   final AlignmentGeometry alignment;
@@ -97,6 +102,11 @@ class UniversalImage extends StatelessWidget {
   final bool gaplessPlayback;
   final double height;
   final Widget placeholder;
+  final Widget errorPlaceholder;
+  final bool cache;
+  final bool enableMemoryCache;
+  final bool clearMemoryCacheIfFailed;
+  final bool clearMemoryCacheWhenDispose;
 
   /// Image uri, it can be http url, assets file path (assets path must start with `assets`) or local file
   final String imageUri;
@@ -241,38 +251,40 @@ class UniversalImage extends StatelessWidget {
   /// It uses [extended_image](https://github.com/fluttercandies/extended_image)
   Widget _createOtherImage() {
     if (_isAsset) {
-      return ExtendedImage.asset(
-        imageUri,
-        key: key,
-        fit: fit,
-        scale: scale,
-        color: color,
-        width: width,
-        height: height,
-        alignment: alignment,
-        filterQuality: filterQuality,
-        colorBlendMode: colorBlendMode,
-        isAntiAlias: isAntiAlias,
-        repeat: repeat,
-        centerSlice: centerSlice,
-        semanticLabel: semanticLabel,
-        excludeFromSemantics: excludeFromSemantics,
-        matchTextDirection: matchTextDirection,
-        gaplessPlayback: gaplessPlayback,
-        cacheWidth: cacheWidth,
-        cacheHeight: cacheHeight,
-        loadStateChanged: placeholder != null
-            ? (ExtendedImageState state) {
-                switch (state.extendedImageLoadState) {
-                  case LoadState.loading:
-                  case LoadState.failed:
-                    return placeholder;
-                  default:
-                    return null;
+      return ExtendedImage.asset(imageUri,
+          key: key,
+          fit: fit,
+          scale: scale,
+          color: color,
+          width: width,
+          height: height,
+          alignment: alignment,
+          filterQuality: filterQuality,
+          colorBlendMode: colorBlendMode,
+          isAntiAlias: isAntiAlias,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          cacheWidth: cacheWidth,
+          cacheHeight: cacheHeight,
+          loadStateChanged: placeholder != null
+              ? (ExtendedImageState state) {
+                  switch (state.extendedImageLoadState) {
+                    case LoadState.loading:
+                      return placeholder;
+                    case LoadState.failed:
+                      return errorPlaceholder ?? placeholder;
+                    default:
+                      return null;
+                  }
                 }
-              }
-            : null,
-      );
+              : null,
+          enableMemoryCache: enableMemoryCache,
+          clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
+          clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose);
     }
 
     if (_isNetwork) {
@@ -300,13 +312,18 @@ class UniversalImage extends StatelessWidget {
             ? (ExtendedImageState state) {
                 switch (state.extendedImageLoadState) {
                   case LoadState.loading:
-                  case LoadState.failed:
                     return placeholder;
+                  case LoadState.failed:
+                    return errorPlaceholder ?? placeholder;
                   default:
                     return null;
                 }
               }
             : null,
+        cache: cache,
+        enableMemoryCache: enableMemoryCache,
+        clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
+        clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
       );
     }
 
@@ -334,13 +351,17 @@ class UniversalImage extends StatelessWidget {
           ? (ExtendedImageState state) {
               switch (state.extendedImageLoadState) {
                 case LoadState.loading:
-                case LoadState.failed:
                   return placeholder;
+                case LoadState.failed:
+                  return errorPlaceholder ?? placeholder;
                 default:
                   return null;
               }
             }
           : null,
+      enableMemoryCache: enableMemoryCache,
+      clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
+      clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
     );
   }
 
@@ -407,8 +428,8 @@ class UniversalImage extends StatelessWidget {
   }
 
   /// Clear cache from memory and disk
-  static void clearCache() {
+  static Future<void> clearCache() async {
     clearMemoryImageCache();
-    clearDiskCachedImages();
+    await clearDiskCachedImages();
   }
 }

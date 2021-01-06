@@ -29,3 +29,6 @@
 
 ## [0.0.6+4] - Add clear cache
 * Add clear cache method
+
+## [0.0.6+5] - Update cache settings
+* Update cache settings
