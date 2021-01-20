@@ -10,19 +10,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:extended_image/extended_image.dart';
 import 'dart:convert';
 
-/// The prefix of icon uri
-final String _iconUriPrefix = 'icons://';
-
 /// The prefix of memory data
 final String _memoryUriPrefix = 'base64://';
-
-extension $IconData on IconData {
-  /// Convert icon into uri to work with UniversalImage
-  ///
-  /// Example. `Icons.add.uri`
-  String get uri =>
-      '$_iconUriPrefix$codePoint/$fontFamily/$fontPackage/$matchTextDirection';
-}
 
 extension $Uint8List on Uint8List {
   /// Convert bytes array into uri
@@ -49,13 +38,49 @@ extension $Uint8List on Uint8List {
 ///
 /// `Network provider`: `UniversalImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')`
 ///
-/// `Icon provider`: `UniversalImage(Icons.add.uri)`
+/// `Icon provider`: `UniversalImage.icon(Icons.add)`
 ///
 /// `Memory provider`: `UniversalImage('base64://base64string')`
 class UniversalImage extends StatelessWidget {
   const UniversalImage(
     this.imageUri, {
     Key key,
+    this.scale = 1.0,
+    this.icon,
+    this.frameBuilder,
+    this.errorBuilder,
+    this.semanticLabel,
+    this.excludeFromSemantics = false,
+    this.width,
+    this.height,
+    this.color,
+    this.colorBlendMode,
+    this.fit,
+    this.alignment = Alignment.center,
+    this.repeat = ImageRepeat.noRepeat,
+    this.centerSlice,
+    this.matchTextDirection = false,
+    this.gaplessPlayback = false,
+    this.isAntiAlias = false,
+    this.filterQuality = FilterQuality.low,
+    this.cacheWidth,
+    this.cacheHeight,
+    this.allowDrawingOutsideViewBox = false,
+    this.svgSkiaMode = false,
+    this.size,
+    this.textDirection,
+    this.placeholder,
+    this.errorPlaceholder,
+    this.cache = true,
+    this.enableMemoryCache = true,
+    this.clearMemoryCacheIfFailed = true,
+    this.clearMemoryCacheWhenDispose = false,
+  }) : super(key: key);
+
+  UniversalImage.icon(
+    this.icon, {
+    Key key,
+    this.imageUri,
     this.scale = 1.0,
     this.frameBuilder,
     this.errorBuilder,
@@ -118,6 +143,7 @@ class UniversalImage extends StatelessWidget {
   final String semanticLabel;
   final double width;
   final bool svgSkiaMode;
+  final IconData icon;
 
   /// For Icon only
   final double size;
@@ -131,7 +157,7 @@ class UniversalImage extends StatelessWidget {
 
   bool get _isSvg => imageUri.endsWith('.svg');
 
-  bool get _isIcon => imageUri.startsWith(_iconUriPrefix);
+  bool get _isIcon => icon != null;
 
   bool get _isMemory => imageUri.startsWith(_memoryUriPrefix);
 
@@ -366,25 +392,8 @@ class UniversalImage extends StatelessWidget {
   }
 
   Widget _createIconImage() {
-    var data = imageUri.replaceAll(_iconUriPrefix, ''); // remove prefix
-    var tokens = data.split('/');
-    var codePoint = int.parse(tokens[0]); // the first part must be int data
-    var fontFamily = tokens.length > 1
-        ? (tokens[1]?.toLowerCase() == 'null' ? null : tokens[1])
-        : null;
-    var fontPackage = tokens.length > 2
-        ? (tokens[2]?.toLowerCase() == 'null' ? null : tokens[2])
-        : null;
-    var matchTextDirection =
-        tokens.length > 3 ? (tokens[3]?.toLowerCase() == 'true') : false;
-
     return Icon(
-      IconData(
-        codePoint,
-        fontFamily: fontFamily,
-        fontPackage: fontPackage,
-        matchTextDirection: matchTextDirection,
-      ),
+      icon,
       size: size,
       color: color,
       textDirection: textDirection,

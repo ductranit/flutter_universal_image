@@ -32,3 +32,6 @@
 
 ## [0.0.6+5] - Update cache settings
 * Update cache settings
+
+## [0.0.7] - Remove icon prefix to fix tree shake icon
+* Now using `UniversalImage.icon` with IconData to fix tree shake icons during build

@@ -32,8 +32,8 @@ void main() {
 
     expect(widget.imageUri != null, true);
 
-    var iconWidget = UniversalImage(
-      Icons.add.uri,
+    var iconWidget = UniversalImage.icon(
+      Icons.add,
       color: Colors.red,
       textDirection: TextDirection.ltr,
     );

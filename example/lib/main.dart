@@ -47,8 +47,8 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // icon provider
-              UniversalImage(
-                Icons.access_alarm.uri,
+              UniversalImage.icon(
+                Icons.access_alarm,
                 color: Colors.yellow,
               ),
               // svg provider
