@@ -35,3 +35,6 @@
 
 ## [0.0.7] - Remove icon prefix to fix tree shake icon
 * Now using `UniversalImage.icon` with IconData to fix tree shake icons during build
+
+## [0.0.8] - Update flutter svg
+* Update flutter svg to fix nullOK issue on flutter master
