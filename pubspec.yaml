@@ -1,6 +1,6 @@
 name: universal_image
 description: A flutter package to display all image types for all platforms
-version: 0.0.8
+version: 0.0.9
 homepage: https://github.com/ductranit/flutter_universal_image
 repository: https://github.com/ductranit/flutter_universal_image
 issue_tracker: https://github.com/ductranit/flutter_universal_image/issues
@@ -12,12 +12,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^0.20.0-nullsafety.3
-  extended_image: 1.5.0-dev
+  flutter_svg: ^0.19.3
+  extended_image: ^3.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic: ^1.9.2
+  pedantic: ^1.11.0
 
 flutter:

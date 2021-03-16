@@ -38,3 +38,9 @@
 
 ## [0.0.8] - Update flutter svg
 * Update flutter svg to fix nullOK issue on flutter master
+
+## [0.0.9] - Update dependencies
+* Update flutter svg & extended image
+* Move to flutter stable channel
+* Fix svg issue on web
+* Add precache image

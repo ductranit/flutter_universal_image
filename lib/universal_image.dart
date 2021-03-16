@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:extended_image/extended_image.dart';
 import 'dart:convert';
@@ -167,59 +168,6 @@ class UniversalImage extends StatelessWidget {
   ///
   /// Otherwise it uses [flutter_svg](https://pub.dev/packages/flutter_svg)
   Widget _createSvgImage() {
-    if (kIsWeb && !svgSkiaMode) {
-      // Use `Image.network()` for both network and asset svg
-      if (_isAsset || _isNetwork) {
-        return Image.network(
-          imageUri,
-          key: key,
-          fit: fit,
-          scale: scale,
-          color: color,
-          width: width,
-          height: height,
-          alignment: alignment,
-          filterQuality: filterQuality,
-          colorBlendMode: colorBlendMode,
-          isAntiAlias: isAntiAlias,
-          repeat: repeat,
-          centerSlice: centerSlice,
-          frameBuilder: frameBuilder,
-          errorBuilder: errorBuilder,
-          semanticLabel: semanticLabel,
-          excludeFromSemantics: excludeFromSemantics,
-          matchTextDirection: matchTextDirection,
-          gaplessPlayback: gaplessPlayback,
-          cacheWidth: cacheWidth,
-          cacheHeight: cacheHeight,
-        );
-      }
-
-      return Image.file(
-        File(imageUri),
-        key: key,
-        fit: fit,
-        scale: scale,
-        color: color,
-        width: width,
-        height: height,
-        alignment: alignment,
-        filterQuality: filterQuality,
-        colorBlendMode: colorBlendMode,
-        isAntiAlias: isAntiAlias,
-        repeat: repeat,
-        centerSlice: centerSlice,
-        frameBuilder: frameBuilder,
-        errorBuilder: errorBuilder,
-        semanticLabel: semanticLabel,
-        excludeFromSemantics: excludeFromSemantics,
-        matchTextDirection: matchTextDirection,
-        gaplessPlayback: gaplessPlayback,
-        cacheWidth: cacheWidth,
-        cacheHeight: cacheHeight,
-      );
-    }
-
     if (_isAsset) {
       return SvgPicture.asset(
         imageUri,
@@ -440,5 +388,35 @@ class UniversalImage extends StatelessWidget {
   static Future<void> clearCache() async {
     clearMemoryImageCache();
     await clearDiskCachedImages();
+  }
+
+  /// Precache the image
+  static Future<void> precache(BuildContext context, String imageUri) async {
+    if (imageUri.endsWith('.svg')) {
+      if (imageUri.startsWith('assets')) {
+        await precachePicture(
+          ExactAssetPicture(SvgPicture.svgStringDecoder, imageUri),
+          null,
+        );
+      } else if (imageUri.startsWith('http')) {
+        await precachePicture(
+          NetworkPicture(SvgPicture.svgByteDecoder, imageUri),
+          null,
+        );
+      } else {
+        await precachePicture(
+          FilePicture(SvgPicture.svgByteDecoder, File(imageUri)),
+          null,
+        );
+      }
+    } else {
+      if (imageUri.startsWith('assets')) {
+        await precacheImage(ExtendedExactAssetImageProvider(imageUri), context);
+      } else if (imageUri.startsWith('http')) {
+        await precacheImage(ExtendedNetworkImageProvider(imageUri), context);
+      } else {
+        await precacheImage(ExtendedFileImageProvider(File(imageUri)), context);
+      }
+    }
   }
 }
