@@ -76,6 +76,7 @@ class UniversalImage extends StatelessWidget {
     this.enableMemoryCache = true,
     this.clearMemoryCacheIfFailed = true,
     this.clearMemoryCacheWhenDispose = false,
+    this.assetPrefix = 'assets',
   }) : super(key: key);
 
   UniversalImage.icon(
@@ -111,6 +112,7 @@ class UniversalImage extends StatelessWidget {
     this.enableMemoryCache = true,
     this.clearMemoryCacheIfFailed = true,
     this.clearMemoryCacheWhenDispose = false,
+    this.assetPrefix = 'assets',
   }) : super(key: key);
 
   final AlignmentGeometry alignment;
@@ -152,9 +154,11 @@ class UniversalImage extends StatelessWidget {
   /// For Icon only
   final TextDirection textDirection;
 
+  final String assetPrefix;
+
   bool get _isNetwork => imageUri.startsWith('http');
 
-  bool get _isAsset => imageUri.startsWith('assets');
+  bool get _isAsset => imageUri.startsWith(assetPrefix);
 
   bool get _isSvg => imageUri.endsWith('.svg');
 
@@ -391,9 +395,10 @@ class UniversalImage extends StatelessWidget {
   }
 
   /// Precache the image
-  static Future<void> precache(BuildContext context, String imageUri) async {
+  static Future<void> precache(BuildContext context, String imageUri,
+      {String assetPrefix = 'assets'}) async {
     if (imageUri.endsWith('.svg')) {
-      if (imageUri.startsWith('assets')) {
+      if (imageUri.startsWith(assetPrefix)) {
         await precachePicture(
           ExactAssetPicture(SvgPicture.svgStringDecoder, imageUri),
           null,
@@ -410,7 +415,7 @@ class UniversalImage extends StatelessWidget {
         );
       }
     } else {
-      if (imageUri.startsWith('assets')) {
+      if (imageUri.startsWith(assetPrefix)) {
         await precacheImage(ExtendedExactAssetImageProvider(imageUri), context);
       } else if (imageUri.startsWith('http')) {
         await precacheImage(ExtendedNetworkImageProvider(imageUri), context);

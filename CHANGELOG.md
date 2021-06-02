@@ -44,3 +44,7 @@
 * Move to flutter stable channel
 * Fix svg issue on web
 * Add precache image
+
+## [0.1.0] - Allow to custom asset prefix
+* Allow to custom asset prefix, by default it is `assets`
+* Update flutter svg & extended image
