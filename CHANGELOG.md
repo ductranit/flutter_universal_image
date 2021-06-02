@@ -48,3 +48,6 @@
 ## [0.1.0] - Allow to custom asset prefix
 * Allow to custom asset prefix, by default it is `assets`
 * Update flutter svg & extended image
+
+## [0.1.1] - Add svg color filter cache
+* Add `cacheColorFilter` from flutter svg

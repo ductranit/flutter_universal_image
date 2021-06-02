@@ -77,6 +77,7 @@ class UniversalImage extends StatelessWidget {
     this.clearMemoryCacheIfFailed = true,
     this.clearMemoryCacheWhenDispose = false,
     this.assetPrefix = 'assets',
+    this.cacheColorFilter = false,
   }) : super(key: key);
 
   UniversalImage.icon(
@@ -113,6 +114,7 @@ class UniversalImage extends StatelessWidget {
     this.clearMemoryCacheIfFailed = true,
     this.clearMemoryCacheWhenDispose = false,
     this.assetPrefix = 'assets',
+    this.cacheColorFilter = false,
   }) : super(key: key);
 
   final AlignmentGeometry alignment;
@@ -135,6 +137,18 @@ class UniversalImage extends StatelessWidget {
   final bool enableMemoryCache;
   final bool clearMemoryCacheIfFailed;
   final bool clearMemoryCacheWhenDispose;
+
+  /// Whether to cache the picture with the [colorFilter] applied or not.
+  ///
+  /// This value should be set to true if the same SVG will be rendered with
+  /// multiple colors, but false if it will always (or almost always) be
+  /// rendered with the same [colorFilter].
+  ///
+  /// If [Svg.cacheColorFilterOverride] is not null, it will override this value
+  /// for all widgets, regardless of what is specified for an individual widget.
+  ///
+  /// This defaults to false and must not be null.
+  final bool cacheColorFilter;
 
   /// Image uri, it can be http url, assets file path (assets path must start with `assets`) or local file
   final String imageUri;
@@ -187,6 +201,7 @@ class UniversalImage extends StatelessWidget {
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
         placeholderBuilder:
             placeholder != null ? (BuildContext context) => placeholder : null,
+        cacheColorFilter: cacheColorFilter,
       );
     }
 
@@ -205,6 +220,7 @@ class UniversalImage extends StatelessWidget {
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
         placeholderBuilder:
             placeholder != null ? (BuildContext context) => placeholder : null,
+        cacheColorFilter: cacheColorFilter,
       );
     }
 
@@ -222,6 +238,7 @@ class UniversalImage extends StatelessWidget {
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholderBuilder:
           placeholder != null ? (BuildContext context) => placeholder : null,
+      cacheColorFilter: cacheColorFilter,
     );
   }
 
