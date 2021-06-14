@@ -51,3 +51,6 @@
 
 ## [0.1.1] - Add svg color filter cache
 * Add `cacheColorFilter` from flutter svg
+
+## [0.1.2] - Add cache properties for extended image
+*  Add cache properties: `compressionRatio` and `maxBytes` for extended image

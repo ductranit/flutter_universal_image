@@ -78,6 +78,8 @@ class UniversalImage extends StatelessWidget {
     this.clearMemoryCacheWhenDispose = false,
     this.assetPrefix = 'assets',
     this.cacheColorFilter = false,
+    this.compressionRatio,
+    this.maxBytes,
   }) : super(key: key);
 
   UniversalImage.icon(
@@ -115,6 +117,8 @@ class UniversalImage extends StatelessWidget {
     this.clearMemoryCacheWhenDispose = false,
     this.assetPrefix = 'assets',
     this.cacheColorFilter = false,
+    this.compressionRatio,
+    this.maxBytes,
   }) : super(key: key);
 
   final AlignmentGeometry alignment;
@@ -137,6 +141,8 @@ class UniversalImage extends StatelessWidget {
   final bool enableMemoryCache;
   final bool clearMemoryCacheIfFailed;
   final bool clearMemoryCacheWhenDispose;
+  final double compressionRatio;
+  final int maxBytes;
 
   /// Whether to cache the picture with the [colorFilter] applied or not.
   ///
@@ -246,40 +252,44 @@ class UniversalImage extends StatelessWidget {
   /// It uses [extended_image](https://github.com/fluttercandies/extended_image)
   Widget _createOtherImage() {
     if (_isAsset) {
-      return ExtendedImage.asset(imageUri,
-          key: key,
-          fit: fit,
-          scale: scale,
-          color: color,
-          width: width,
-          height: height,
-          alignment: alignment,
-          filterQuality: filterQuality,
-          colorBlendMode: colorBlendMode,
-          isAntiAlias: isAntiAlias,
-          repeat: repeat,
-          centerSlice: centerSlice,
-          semanticLabel: semanticLabel,
-          excludeFromSemantics: excludeFromSemantics,
-          matchTextDirection: matchTextDirection,
-          gaplessPlayback: gaplessPlayback,
-          cacheWidth: cacheWidth,
-          cacheHeight: cacheHeight,
-          loadStateChanged: placeholder != null
-              ? (ExtendedImageState state) {
-                  switch (state.extendedImageLoadState) {
-                    case LoadState.loading:
-                      return placeholder;
-                    case LoadState.failed:
-                      return errorPlaceholder ?? placeholder;
-                    default:
-                      return null;
-                  }
+      return ExtendedImage.asset(
+        imageUri,
+        key: key,
+        fit: fit,
+        scale: scale,
+        color: color,
+        width: width,
+        height: height,
+        alignment: alignment,
+        filterQuality: filterQuality,
+        colorBlendMode: colorBlendMode,
+        isAntiAlias: isAntiAlias,
+        repeat: repeat,
+        centerSlice: centerSlice,
+        semanticLabel: semanticLabel,
+        excludeFromSemantics: excludeFromSemantics,
+        matchTextDirection: matchTextDirection,
+        gaplessPlayback: gaplessPlayback,
+        cacheWidth: cacheWidth,
+        cacheHeight: cacheHeight,
+        loadStateChanged: placeholder != null
+            ? (ExtendedImageState state) {
+                switch (state.extendedImageLoadState) {
+                  case LoadState.loading:
+                    return placeholder;
+                  case LoadState.failed:
+                    return errorPlaceholder ?? placeholder;
+                  default:
+                    return null;
                 }
-              : null,
-          enableMemoryCache: enableMemoryCache,
-          clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
-          clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose);
+              }
+            : null,
+        enableMemoryCache: enableMemoryCache,
+        clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
+        clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
+        maxBytes: maxBytes,
+        compressionRatio: compressionRatio,
+      );
     }
 
     if (_isNetwork) {
@@ -319,6 +329,8 @@ class UniversalImage extends StatelessWidget {
         enableMemoryCache: enableMemoryCache,
         clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
+        maxBytes: maxBytes,
+        compressionRatio: compressionRatio,
       );
     }
 
@@ -357,6 +369,8 @@ class UniversalImage extends StatelessWidget {
       enableMemoryCache: enableMemoryCache,
       clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
       clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
+      maxBytes: maxBytes,
+      compressionRatio: compressionRatio,
     );
   }
 
