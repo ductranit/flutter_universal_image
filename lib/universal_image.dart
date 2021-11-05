@@ -1,13 +1,10 @@
 library universal_image;
 
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:extended_image/extended_image.dart';
 import 'dart:convert';
 
@@ -45,7 +42,7 @@ extension $Uint8List on Uint8List {
 class UniversalImage extends StatelessWidget {
   const UniversalImage(
     this.imageUri, {
-    Key key,
+    Key? key,
     this.scale = 1.0,
     this.icon,
     this.frameBuilder,
@@ -84,8 +81,8 @@ class UniversalImage extends StatelessWidget {
 
   UniversalImage.icon(
     this.icon, {
-    Key key,
-    this.imageUri,
+    Key? key,
+    this.imageUri = '',
     this.scale = 1.0,
     this.frameBuilder,
     this.errorBuilder,
@@ -121,28 +118,28 @@ class UniversalImage extends StatelessWidget {
     this.maxBytes,
   }) : super(key: key);
 
-  final AlignmentGeometry alignment;
+  final Alignment alignment;
   final bool allowDrawingOutsideViewBox;
-  final int cacheHeight;
-  final int cacheWidth;
-  final Rect centerSlice;
-  final Color color;
-  final BlendMode colorBlendMode;
-  final ImageErrorWidgetBuilder errorBuilder;
+  final int? cacheHeight;
+  final int? cacheWidth;
+  final Rect? centerSlice;
+  final Color? color;
+  final BlendMode? colorBlendMode;
+  final ImageErrorWidgetBuilder? errorBuilder;
   final bool excludeFromSemantics;
   final FilterQuality filterQuality;
-  final BoxFit fit;
-  final ImageFrameBuilder frameBuilder;
+  final BoxFit? fit;
+  final ImageFrameBuilder? frameBuilder;
   final bool gaplessPlayback;
-  final double height;
-  final Widget placeholder;
-  final Widget errorPlaceholder;
+  final double? height;
+  final Widget? placeholder;
+  final Widget? errorPlaceholder;
   final bool cache;
   final bool enableMemoryCache;
   final bool clearMemoryCacheIfFailed;
   final bool clearMemoryCacheWhenDispose;
-  final double compressionRatio;
-  final int maxBytes;
+  final double? compressionRatio;
+  final int? maxBytes;
 
   /// Whether to cache the picture with the [colorFilter] applied or not.
   ///
@@ -163,16 +160,16 @@ class UniversalImage extends StatelessWidget {
   final bool matchTextDirection;
   final ImageRepeat repeat;
   final double scale;
-  final String semanticLabel;
-  final double width;
+  final String? semanticLabel;
+  final double? width;
   final bool svgSkiaMode;
-  final IconData icon;
+  final IconData? icon;
 
   /// For Icon only
-  final double size;
+  final double? size;
 
   /// For Icon only
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   final String assetPrefix;
 
@@ -196,17 +193,17 @@ class UniversalImage extends StatelessWidget {
       return SvgPicture.asset(
         imageUri,
         key: key,
-        fit: fit,
+        fit: fit ?? BoxFit.contain,
         color: color,
         width: width,
         height: height,
         alignment: alignment,
-        colorBlendMode: colorBlendMode,
+        colorBlendMode: colorBlendMode ?? BlendMode.srcIn,
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
         placeholderBuilder:
-            placeholder != null ? (BuildContext context) => placeholder : null,
+            placeholder != null ? (BuildContext context) => placeholder! : null,
         cacheColorFilter: cacheColorFilter,
       );
     }
@@ -215,17 +212,17 @@ class UniversalImage extends StatelessWidget {
       return SvgPicture.network(
         imageUri,
         key: key,
-        fit: fit,
+        fit: fit ?? BoxFit.contain,
         color: color,
         width: width,
         height: height,
         alignment: alignment,
-        colorBlendMode: colorBlendMode,
+        colorBlendMode: colorBlendMode ?? BlendMode.srcIn,
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
         placeholderBuilder:
-            placeholder != null ? (BuildContext context) => placeholder : null,
+            placeholder != null ? (BuildContext context) => placeholder! : null,
         cacheColorFilter: cacheColorFilter,
       );
     }
@@ -233,17 +230,17 @@ class UniversalImage extends StatelessWidget {
     return SvgPicture.file(
       File(imageUri),
       key: key,
-      fit: fit,
+      fit: fit ?? BoxFit.contain,
       color: color,
       width: width,
       height: height,
       alignment: alignment,
-      colorBlendMode: colorBlendMode,
+      colorBlendMode: colorBlendMode ?? BlendMode.srcIn,
       excludeFromSemantics: excludeFromSemantics,
       matchTextDirection: matchTextDirection,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholderBuilder:
-          placeholder != null ? (BuildContext context) => placeholder : null,
+          placeholder != null ? (BuildContext context) => placeholder! : null,
       cacheColorFilter: cacheColorFilter,
     );
   }
@@ -431,17 +428,17 @@ class UniversalImage extends StatelessWidget {
     if (imageUri.endsWith('.svg')) {
       if (imageUri.startsWith(assetPrefix)) {
         await precachePicture(
-          ExactAssetPicture(SvgPicture.svgStringDecoder, imageUri),
+          ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, imageUri),
           null,
         );
       } else if (imageUri.startsWith('http')) {
         await precachePicture(
-          NetworkPicture(SvgPicture.svgByteDecoder, imageUri),
+          NetworkPicture(SvgPicture.svgByteDecoderBuilder, imageUri),
           null,
         );
       } else {
         await precachePicture(
-          FilePicture(SvgPicture.svgByteDecoder, File(imageUri)),
+          FilePicture(SvgPicture.svgByteDecoderBuilder, File(imageUri)),
           null,
         );
       }

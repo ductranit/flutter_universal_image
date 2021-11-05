@@ -54,3 +54,6 @@
 
 ## [0.1.2] - Add cache properties for extended image
 *  Add cache properties: `compressionRatio` and `maxBytes` for extended image
+
+## [0.1.3] - Sound of null safety
+*  Support null safety
