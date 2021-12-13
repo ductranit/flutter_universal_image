@@ -1,3 +1,6 @@
+## [0.1.4] - Update libs
+*  Update flutter_svg and extended_image
+*  Migrate to flutter 2.8
 ## [0.1.3] - Sound of null safety
 *  Support null safety
 ## [0.1.2] - Add cache properties for extended image
