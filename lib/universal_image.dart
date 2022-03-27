@@ -3,10 +3,10 @@ library universal_image;
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:extended_image/extended_image.dart';
 import 'dart:convert';
+import 'platforms/image_file.dart';
 
 /// The prefix of memory data
 final String _memoryUriPrefix = 'base64://';
@@ -227,8 +227,8 @@ class UniversalImage extends StatelessWidget {
       );
     }
 
-    return SvgPicture.file(
-      File(imageUri),
+    return svgFile(
+      imageUri,
       key: key,
       fit: fit ?? BoxFit.contain,
       color: color,
@@ -239,8 +239,7 @@ class UniversalImage extends StatelessWidget {
       excludeFromSemantics: excludeFromSemantics,
       matchTextDirection: matchTextDirection,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
-      placeholderBuilder:
-          placeholder != null ? (BuildContext context) => placeholder! : null,
+      placeholder: placeholder,
       cacheColorFilter: cacheColorFilter,
     );
   }
@@ -331,8 +330,8 @@ class UniversalImage extends StatelessWidget {
       );
     }
 
-    return ExtendedImage.file(
-      File(imageUri),
+    return extendedImageFile(
+      imageUri,
       key: key,
       fit: fit,
       scale: scale,
@@ -351,18 +350,8 @@ class UniversalImage extends StatelessWidget {
       gaplessPlayback: gaplessPlayback,
       cacheWidth: cacheWidth,
       cacheHeight: cacheHeight,
-      loadStateChanged: placeholder != null
-          ? (ExtendedImageState state) {
-              switch (state.extendedImageLoadState) {
-                case LoadState.loading:
-                  return placeholder;
-                case LoadState.failed:
-                  return errorPlaceholder ?? placeholder;
-                default:
-                  return null;
-              }
-            }
-          : null,
+      placeholder: placeholder,
+      errorPlaceholder: errorPlaceholder,
       enableMemoryCache: enableMemoryCache,
       clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
       clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
@@ -437,10 +426,7 @@ class UniversalImage extends StatelessWidget {
           null,
         );
       } else {
-        await precachePicture(
-          FilePicture(SvgPicture.svgByteDecoderBuilder, File(imageUri)),
-          null,
-        );
+        await precacheSvgFile(imageUri);
       }
     } else {
       if (imageUri.startsWith(assetPrefix)) {
@@ -448,7 +434,7 @@ class UniversalImage extends StatelessWidget {
       } else if (imageUri.startsWith('http')) {
         await precacheImage(ExtendedNetworkImageProvider(imageUri), context);
       } else {
-        await precacheImage(ExtendedFileImageProvider(File(imageUri)), context);
+        await precacheExtendedImageFile(context, imageUri);
       }
     }
   }

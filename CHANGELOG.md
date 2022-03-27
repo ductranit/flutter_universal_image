@@ -1,3 +1,6 @@
+## [0.1.5] - Support io & html
+*  Update flutter_svg and extended_image
+*  Add platform check to support both dart:io & dart:html
 ## [0.1.4] - Update libs
 *  Update flutter_svg and extended_image
 *  Migrate to flutter 2.8
