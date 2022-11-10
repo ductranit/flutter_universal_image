@@ -1,3 +1,7 @@
+## [0.1.6] - Update libs
+*  Update flutter_svg and extended_image
+*  Support hero animation on extended_image slider
+*  Allow to switch between extended_image and flutter image
 ## [0.1.5] - Support io & html
 *  Update flutter_svg and extended_image
 *  Add platform check to support both dart:io & dart:html

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:universal_io/io.dart';
 import 'dart:convert';
 import 'platforms/image_file.dart';
 
@@ -14,6 +15,15 @@ final String _memoryUriPrefix = 'base64://';
 extension $Uint8List on Uint8List {
   /// Convert bytes array into uri
   String get uri => '$_memoryUriPrefix${base64Encode(this)}';
+}
+
+/// Image loader engine. By default its use `flutter_svg` for svg file, flutter image for memory or icon and use extended_image for the rest
+enum ImageEngine {
+  /// Use default flutter image
+  defaultImage,
+
+  /// Use extended_image lib
+  extendedImage,
 }
 
 /// A widget to display all image types for all platforms.
@@ -77,6 +87,8 @@ class UniversalImage extends StatelessWidget {
     this.cacheColorFilter = false,
     this.compressionRatio,
     this.maxBytes,
+    this.imageEngine = ImageEngine.extendedImage,
+    this.heroTag,
   }) : super(key: key);
 
   UniversalImage.icon(
@@ -116,6 +128,8 @@ class UniversalImage extends StatelessWidget {
     this.cacheColorFilter = false,
     this.compressionRatio,
     this.maxBytes,
+    this.imageEngine = ImageEngine.extendedImage,
+    this.heroTag,
   }) : super(key: key);
 
   final Alignment alignment;
@@ -140,6 +154,8 @@ class UniversalImage extends StatelessWidget {
   final bool clearMemoryCacheWhenDispose;
   final double? compressionRatio;
   final int? maxBytes;
+  final ImageEngine imageEngine;
+  final Object? heroTag;
 
   /// Whether to cache the picture with the [colorFilter] applied or not.
   ///
@@ -248,6 +264,30 @@ class UniversalImage extends StatelessWidget {
   /// It uses [extended_image](https://github.com/fluttercandies/extended_image)
   Widget _createOtherImage() {
     if (_isAsset) {
+      if (imageEngine == ImageEngine.defaultImage) {
+        return Image.asset(
+          imageUri,
+          key: key,
+          fit: fit,
+          filterQuality: filterQuality,
+          scale: scale,
+          color: color,
+          width: width,
+          height: height,
+          alignment: alignment,
+          colorBlendMode: colorBlendMode,
+          isAntiAlias: isAntiAlias,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          cacheWidth: cacheWidth,
+          cacheHeight: cacheHeight,
+        );
+      }
+
       return ExtendedImage.asset(
         imageUri,
         key: key,
@@ -285,10 +325,51 @@ class UniversalImage extends StatelessWidget {
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
         maxBytes: maxBytes,
         compressionRatio: compressionRatio,
+        heroBuilderForSlidingPage: heroTag != null
+            ? (widget) {
+                return Hero(
+                  tag: heroTag!,
+                  child: widget,
+                  flightShuttleBuilder: (BuildContext flightContext,
+                      Animation<double> animation,
+                      HeroFlightDirection flightDirection,
+                      BuildContext fromHeroContext,
+                      BuildContext toHeroContext) {
+                    var hero = (flightDirection == HeroFlightDirection.pop
+                        ? fromHeroContext.widget
+                        : toHeroContext.widget) as Hero;
+                    return hero.child;
+                  },
+                );
+              }
+            : null,
       );
     }
 
     if (_isNetwork) {
+      if (imageEngine == ImageEngine.defaultImage) {
+        return Image.network(
+          imageUri,
+          key: key,
+          fit: fit,
+          scale: scale,
+          color: color,
+          width: width,
+          height: height,
+          alignment: alignment,
+          filterQuality: filterQuality,
+          colorBlendMode: colorBlendMode,
+          isAntiAlias: isAntiAlias,
+          repeat: repeat,
+          centerSlice: centerSlice,
+          semanticLabel: semanticLabel,
+          excludeFromSemantics: excludeFromSemantics,
+          matchTextDirection: matchTextDirection,
+          gaplessPlayback: gaplessPlayback,
+          cacheWidth: cacheWidth,
+          cacheHeight: cacheHeight,
+        );
+      }
       return ExtendedImage.network(
         imageUri,
         key: key,
@@ -327,11 +408,53 @@ class UniversalImage extends StatelessWidget {
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
         maxBytes: maxBytes,
         compressionRatio: compressionRatio,
+        heroBuilderForSlidingPage: heroTag != null
+            ? (widget) {
+                return Hero(
+                  tag: heroTag!,
+                  child: widget,
+                  flightShuttleBuilder: (BuildContext flightContext,
+                      Animation<double> animation,
+                      HeroFlightDirection flightDirection,
+                      BuildContext fromHeroContext,
+                      BuildContext toHeroContext) {
+                    var hero = (flightDirection == HeroFlightDirection.pop
+                        ? fromHeroContext.widget
+                        : toHeroContext.widget) as Hero;
+                    return hero.child;
+                  },
+                );
+              }
+            : null,
       );
     }
 
-    return extendedImageFile(
-      imageUri,
+    if (imageEngine == ImageEngine.defaultImage) {
+      return Image.file(
+        File(imageUri),
+        key: key,
+        fit: fit,
+        scale: scale,
+        color: color,
+        width: width,
+        height: height,
+        alignment: alignment,
+        filterQuality: filterQuality,
+        colorBlendMode: colorBlendMode,
+        isAntiAlias: isAntiAlias,
+        repeat: repeat,
+        centerSlice: centerSlice,
+        semanticLabel: semanticLabel,
+        excludeFromSemantics: excludeFromSemantics,
+        matchTextDirection: matchTextDirection,
+        gaplessPlayback: gaplessPlayback,
+        cacheWidth: cacheWidth,
+        cacheHeight: cacheHeight,
+      );
+    }
+
+    return ExtendedImage.file(
+      File(imageUri),
       key: key,
       fit: fit,
       scale: scale,
@@ -350,13 +473,29 @@ class UniversalImage extends StatelessWidget {
       gaplessPlayback: gaplessPlayback,
       cacheWidth: cacheWidth,
       cacheHeight: cacheHeight,
-      placeholder: placeholder,
-      errorPlaceholder: errorPlaceholder,
       enableMemoryCache: enableMemoryCache,
       clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
       clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
       maxBytes: maxBytes,
       compressionRatio: compressionRatio,
+      heroBuilderForSlidingPage: heroTag != null
+          ? (widget) {
+              return Hero(
+                tag: heroTag!,
+                child: widget,
+                flightShuttleBuilder: (BuildContext flightContext,
+                    Animation<double> animation,
+                    HeroFlightDirection flightDirection,
+                    BuildContext fromHeroContext,
+                    BuildContext toHeroContext) {
+                  var hero = (flightDirection == HeroFlightDirection.pop
+                      ? fromHeroContext.widget
+                      : toHeroContext.widget) as Hero;
+                  return hero.child;
+                },
+              );
+            }
+          : null,
     );
   }
 
