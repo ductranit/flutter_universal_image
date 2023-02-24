@@ -1,4 +1,4 @@
-## [0.1.6] - Update libs
+## [0.1.7] - Update libs
 *  Update flutter_svg and extended_image
 *  Support ColorFilter for svg
 ## [0.1.6] - Update libs
