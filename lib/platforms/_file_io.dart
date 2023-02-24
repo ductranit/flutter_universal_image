@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:ui' as ui;
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,6 +18,7 @@ Widget svgFile(
   bool allowDrawingOutsideViewBox = false,
   Widget? placeholder,
   bool cacheColorFilter = false,
+  ui.ColorFilter? colorFilter,
 }) {
   return SvgPicture.file(
     File(imageUri),
@@ -34,6 +35,7 @@ Widget svgFile(
     placeholderBuilder:
         placeholder != null ? (BuildContext context) => placeholder : null,
     cacheColorFilter: cacheColorFilter,
+    colorFilter: colorFilter,
   );
 }
 
@@ -106,10 +108,9 @@ Widget extendedImageFile(
 }
 
 Future<void> precacheSvgFile(String imageUri) async {
-  await precachePicture(
-    FilePicture(SvgPicture.svgByteDecoderBuilder, File(imageUri)),
-    null,
-  );
+  final loader = SvgAssetLoader(imageUri);
+  await svg.cache
+      .putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
 }
 
 Future<void> precacheExtendedImageFile(

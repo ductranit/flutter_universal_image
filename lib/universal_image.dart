@@ -1,7 +1,7 @@
 library universal_image;
 
 import 'dart:typed_data';
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:extended_image/extended_image.dart';
@@ -89,6 +89,7 @@ class UniversalImage extends StatelessWidget {
     this.maxBytes,
     this.imageEngine = ImageEngine.extendedImage,
     this.heroTag,
+    this.colorFilter,
   }) : super(key: key);
 
   UniversalImage.icon(
@@ -130,6 +131,7 @@ class UniversalImage extends StatelessWidget {
     this.maxBytes,
     this.imageEngine = ImageEngine.extendedImage,
     this.heroTag,
+    this.colorFilter,
   }) : super(key: key);
 
   final Alignment alignment;
@@ -156,6 +158,7 @@ class UniversalImage extends StatelessWidget {
   final int? maxBytes;
   final ImageEngine imageEngine;
   final Object? heroTag;
+  final ui.ColorFilter? colorFilter;
 
   /// Whether to cache the picture with the [colorFilter] applied or not.
   ///
@@ -221,6 +224,7 @@ class UniversalImage extends StatelessWidget {
         placeholderBuilder:
             placeholder != null ? (BuildContext context) => placeholder! : null,
         cacheColorFilter: cacheColorFilter,
+        colorFilter: colorFilter,
       );
     }
 
@@ -240,6 +244,7 @@ class UniversalImage extends StatelessWidget {
         placeholderBuilder:
             placeholder != null ? (BuildContext context) => placeholder! : null,
         cacheColorFilter: cacheColorFilter,
+        colorFilter: colorFilter,
       );
     }
 
@@ -257,6 +262,7 @@ class UniversalImage extends StatelessWidget {
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholder: placeholder,
       cacheColorFilter: cacheColorFilter,
+      colorFilter: colorFilter,
     );
   }
 
@@ -555,15 +561,13 @@ class UniversalImage extends StatelessWidget {
       {String assetPrefix = 'assets'}) async {
     if (imageUri.endsWith('.svg')) {
       if (imageUri.startsWith(assetPrefix)) {
-        await precachePicture(
-          ExactAssetPicture(SvgPicture.svgStringDecoderBuilder, imageUri),
-          null,
-        );
+        final loader = SvgAssetLoader(imageUri);
+        await svg.cache
+            .putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
       } else if (imageUri.startsWith('http')) {
-        await precachePicture(
-          NetworkPicture(SvgPicture.svgByteDecoderBuilder, imageUri),
-          null,
-        );
+        final loader = SvgNetworkLoader(imageUri);
+        await svg.cache
+            .putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
       } else {
         await precacheSvgFile(imageUri);
       }

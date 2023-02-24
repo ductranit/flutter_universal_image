@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'dart:ui' as ui;
 
 Widget svgFile(
   String imageUri, {
@@ -14,6 +15,7 @@ Widget svgFile(
   bool allowDrawingOutsideViewBox = false,
   Widget? placeholder,
   bool cacheColorFilter = false,
+  ui.ColorFilter? colorFilter,
 }) {
   throw UnsupportedError('File is not supported on web');
 }
