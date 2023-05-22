@@ -1,3 +1,6 @@
+## [0.1.8] - Support dart 3.0
+*  Update flutter_svg and extended_image
+*  Support dart 3.0
 ## [0.1.7] - Update libs
 *  Update flutter_svg and extended_image
 *  Support ColorFilter for svg

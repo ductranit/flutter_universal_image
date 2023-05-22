@@ -30,7 +30,7 @@ void main() {
       svgSkiaMode: false,
     );
 
-    expect(widget.imageUri != null, true);
+    expect(widget.imageUri.isNotEmpty, true);
 
     var iconWidget = UniversalImage.icon(
       Icons.add,
@@ -38,6 +38,6 @@ void main() {
       textDirection: TextDirection.ltr,
     );
 
-    expect(iconWidget.imageUri != null, true);
+    expect(iconWidget.imageUri.isNotEmpty, true);
   });
 }

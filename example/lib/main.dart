@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (snapshot.hasData) {
                     // memory provider
                     return UniversalImage(
-                      snapshot.data,
+                      snapshot.data!,
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
