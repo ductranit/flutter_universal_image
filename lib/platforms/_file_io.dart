@@ -24,18 +24,15 @@ Widget svgFile(
     File(imageUri),
     key: key,
     fit: fit ?? BoxFit.contain,
-    color: color,
     width: width,
     height: height,
     alignment: alignment,
-    colorBlendMode: colorBlendMode ?? BlendMode.srcIn,
     excludeFromSemantics: excludeFromSemantics,
     matchTextDirection: matchTextDirection,
     allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
     placeholderBuilder:
         placeholder != null ? (BuildContext context) => placeholder : null,
-    cacheColorFilter: cacheColorFilter,
-    colorFilter: colorFilter,
+    colorFilter: _getColorFilter(colorFilter, color, colorBlendMode),
   );
 }
 
@@ -105,6 +102,19 @@ Widget extendedImageFile(
     maxBytes: maxBytes,
     compressionRatio: compressionRatio,
   );
+}
+
+ui.ColorFilter? _getColorFilter(
+    ui.ColorFilter? filter, ui.Color? color, ui.BlendMode? colorBlendMode) {
+  if (filter != null) {
+    return filter;
+  }
+
+  if (color != null) {
+    return ui.ColorFilter.mode(color, colorBlendMode ?? ui.BlendMode.srcIn);
+  }
+
+  return null;
 }
 
 Future<void> precacheSvgFile(String imageUri) async {

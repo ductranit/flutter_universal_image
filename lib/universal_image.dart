@@ -84,7 +84,6 @@ class UniversalImage extends StatelessWidget {
     this.clearMemoryCacheIfFailed = true,
     this.clearMemoryCacheWhenDispose = false,
     this.assetPrefix = 'assets',
-    this.cacheColorFilter = false,
     this.compressionRatio,
     this.maxBytes,
     this.imageEngine = ImageEngine.extendedImage,
@@ -126,7 +125,6 @@ class UniversalImage extends StatelessWidget {
     this.clearMemoryCacheIfFailed = true,
     this.clearMemoryCacheWhenDispose = false,
     this.assetPrefix = 'assets',
-    this.cacheColorFilter = false,
     this.compressionRatio,
     this.maxBytes,
     this.imageEngine = ImageEngine.extendedImage,
@@ -159,18 +157,6 @@ class UniversalImage extends StatelessWidget {
   final ImageEngine imageEngine;
   final Object? heroTag;
   final ui.ColorFilter? colorFilter;
-
-  /// Whether to cache the picture with the [colorFilter] applied or not.
-  ///
-  /// This value should be set to true if the same SVG will be rendered with
-  /// multiple colors, but false if it will always (or almost always) be
-  /// rendered with the same [colorFilter].
-  ///
-  /// If [Svg.cacheColorFilterOverride] is not null, it will override this value
-  /// for all widgets, regardless of what is specified for an individual widget.
-  ///
-  /// This defaults to false and must not be null.
-  final bool cacheColorFilter;
 
   /// Image uri, it can be http url, assets file path (assets path must start with `assets`) or local file
   final String imageUri;
@@ -213,18 +199,15 @@ class UniversalImage extends StatelessWidget {
         imageUri,
         key: key,
         fit: fit ?? BoxFit.contain,
-        color: color,
         width: width,
         height: height,
         alignment: alignment,
-        colorBlendMode: colorBlendMode ?? BlendMode.srcIn,
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
         placeholderBuilder:
             placeholder != null ? (BuildContext context) => placeholder! : null,
-        cacheColorFilter: cacheColorFilter,
-        colorFilter: colorFilter,
+        colorFilter: _getColorFilter(colorFilter, color, colorBlendMode),
       );
     }
 
@@ -233,18 +216,15 @@ class UniversalImage extends StatelessWidget {
         imageUri,
         key: key,
         fit: fit ?? BoxFit.contain,
-        color: color,
         width: width,
         height: height,
         alignment: alignment,
-        colorBlendMode: colorBlendMode ?? BlendMode.srcIn,
         excludeFromSemantics: excludeFromSemantics,
         matchTextDirection: matchTextDirection,
         allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
         placeholderBuilder:
             placeholder != null ? (BuildContext context) => placeholder! : null,
-        cacheColorFilter: cacheColorFilter,
-        colorFilter: colorFilter,
+        colorFilter: _getColorFilter(colorFilter, color, colorBlendMode),
       );
     }
 
@@ -261,7 +241,6 @@ class UniversalImage extends StatelessWidget {
       matchTextDirection: matchTextDirection,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholder: placeholder,
-      cacheColorFilter: cacheColorFilter,
       colorFilter: colorFilter,
     );
   }
@@ -540,6 +519,19 @@ class UniversalImage extends StatelessWidget {
       cacheWidth: cacheWidth,
       cacheHeight: cacheHeight,
     );
+  }
+
+  ui.ColorFilter? _getColorFilter(
+      ui.ColorFilter? filter, ui.Color? color, ui.BlendMode? colorBlendMode) {
+    if (filter != null) {
+      return filter;
+    }
+
+    if (color != null) {
+      return ui.ColorFilter.mode(color, colorBlendMode ?? ui.BlendMode.srcIn);
+    }
+
+    return null;
   }
 
   @override
