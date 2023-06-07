@@ -4,6 +4,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+/// Create svg image widget
 Widget svgFile(
   String imageUri, {
   Key? key,
@@ -36,6 +37,7 @@ Widget svgFile(
   );
 }
 
+/// Create extended image widget
 Widget extendedImageFile(
   String imageUri, {
   Key? key,
@@ -104,6 +106,9 @@ Widget extendedImageFile(
   );
 }
 
+///
+/// Get color filter for svg base on `color` and `colorBlendMode`
+///
 ui.ColorFilter? _getColorFilter(
     ui.ColorFilter? filter, ui.Color? color, ui.BlendMode? colorBlendMode) {
   if (filter != null) {
@@ -117,12 +122,14 @@ ui.ColorFilter? _getColorFilter(
   return null;
 }
 
+/// precache svg data
 Future<void> precacheSvgFile(String imageUri) async {
   final loader = SvgAssetLoader(imageUri);
   await svg.cache
       .putIfAbsent(loader.cacheKey(null), () => loader.loadBytes(null));
 }
 
+/// precache extended image
 Future<void> precacheExtendedImageFile(
     BuildContext context, String imageUri) async {
   await precacheImage(ExtendedFileImageProvider(File(imageUri)), context);

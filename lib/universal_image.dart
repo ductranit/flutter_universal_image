@@ -10,7 +10,7 @@ import 'dart:convert';
 import 'platforms/image_file.dart';
 
 /// The prefix of memory data
-final String _memoryUriPrefix = 'base64://';
+const String _memoryUriPrefix = 'base64://';
 
 extension $Uint8List on Uint8List {
   /// Convert bytes array into uri
@@ -50,6 +50,9 @@ enum ImageEngine {
 ///
 /// `Memory provider`: `UniversalImage('base64://base64string')`
 class UniversalImage extends StatelessWidget {
+  ///
+  /// Create image widet base on uri
+  ///
   const UniversalImage(
     this.imageUri, {
     Key? key,
@@ -91,6 +94,9 @@ class UniversalImage extends StatelessWidget {
     this.colorFilter,
   }) : super(key: key);
 
+  ///
+  /// Create image widet base on icon data
+  ///
   UniversalImage.icon(
     this.icon, {
     Key? key,
@@ -132,60 +138,130 @@ class UniversalImage extends StatelessWidget {
     this.colorFilter,
   }) : super(key: key);
 
+  ///Represents the alignment of the image within its container.
   final Alignment alignment;
+
+  /// A boolean property that determines whether the image can be drawn outside its viewBox. Default is `false`.
   final bool allowDrawingOutsideViewBox;
+
+  /// An optional integer property that sets the height of the image cache.
   final int? cacheHeight;
+
+  /// An optional integer property that sets the width of the image cache.
   final int? cacheWidth;
+
+  ///  An optional `Rect` property that defines the center slice of the image.
   final Rect? centerSlice;
+
+  /// An optional `Color` property that sets the color of the image.
   final Color? color;
+
+  /// An optional `BlendMode` property that defines how the image color should blend with the background.
   final BlendMode? colorBlendMode;
+
+  /// An optional `ImageErrorWidgetBuilder` property that defines the error widget when the image fails to load.
   final ImageErrorWidgetBuilder? errorBuilder;
+
+  /// A boolean property that determines whether the image is excluded from semantics. Default is `false`.
   final bool excludeFromSemantics;
+
+  /// A `FilterQuality` property that sets the quality of image filtering.
   final FilterQuality filterQuality;
+
+  /// An optional `BoxFit` property that defines how the image should fit within its container.
   final BoxFit? fit;
+
+  /// An optional `ImageFrameBuilder` property that defines the frame builder for the image.
   final ImageFrameBuilder? frameBuilder;
+
+  /// A boolean property that determines whether the image should have gapless playback. Default is `false`.
   final bool gaplessPlayback;
+
+  /// An optional double property that sets the height of the image.
   final double? height;
+
+  /// An optional `Widget` property that defines the placeholder widget displayed while the image is loading.
   final Widget? placeholder;
+
+  /// An optional `Widget` property that defines the error placeholder widget displayed when the image fails to load.
   final Widget? errorPlaceholder;
+
+  /// A boolean property that determines whether the image should be cached. Default is `true`.
   final bool cache;
+
+  /// A boolean property that determines whether the memory cache is enabled. Default is `true`.
   final bool enableMemoryCache;
+
+  /// A boolean property that determines whether to clear the memory cache if the image fails to load. Default is `true`.
   final bool clearMemoryCacheIfFailed;
+
+  /// A boolean property that determines whether to clear the memory cache when the widget is disposed. Default is `false`.
   final bool clearMemoryCacheWhenDispose;
+
+  /// An optional double property that sets the image compression ratio.
   final double? compressionRatio;
+
+  ///  An optional integer property that sets the maximum number of bytes for the image.
   final int? maxBytes;
+
+  /// An `ImageEngine` property that sets the image engine.
   final ImageEngine imageEngine;
+
+  ///  An optional `Object` property that sets the hero tag for the image.
   final Object? heroTag;
+
+  /// An optional `ui.ColorFilter` property that sets the color filter of the image.
   final ui.ColorFilter? colorFilter;
 
   /// Image uri, it can be http url, assets file path (assets path must start with `assets`) or local file
   final String imageUri;
 
+  /// A boolean property that determines whether the image should be anti-aliased. Default is `false`.
   final bool isAntiAlias;
+
+  /// Indicates whether the image should match the text direction or not.
   final bool matchTextDirection;
+
+  /// Determines how the image should be repeated.
   final ImageRepeat repeat;
+
+  /// The scale to apply to the image.
   final double scale;
+
+  /// The semantic label for the image, used for accessibility.
   final String? semanticLabel;
+
+  /// The width of the image.
   final double? width;
+
+  /// Indicates whether the image should be rendered using Skia for SVGs.
   final bool svgSkiaMode;
+
+  /// The icon data, if the resource is an icon.
   final IconData? icon;
 
-  /// For Icon only
+  /// The size of the icon, if the resource is an icon.
   final double? size;
 
-  /// For Icon only
+  /// The text direction for the icon, if the resource is an icon.
   final TextDirection? textDirection;
 
+  /// The prefix used for asset images.
   final String assetPrefix;
 
+  /// Checks if the image is a network image.
   bool get _isNetwork => imageUri.startsWith('http');
 
+  /// Checks if the image is an asset image.
   bool get _isAsset => imageUri.startsWith(assetPrefix);
 
+  /// Checks if the image is an SVG.
   bool get _isSvg => imageUri.endsWith('.svg');
 
+  /// Checks if the resource is an icon.
   bool get _isIcon => icon != null;
 
+  /// Checks if the image is a memory image.
   bool get _isMemory => imageUri.startsWith(_memoryUriPrefix);
 
   /// Create svg image widget.
@@ -484,6 +560,9 @@ class UniversalImage extends StatelessWidget {
     );
   }
 
+  ///
+  /// Create image from icon data
+  ///
   Widget _createIconImage() {
     return Icon(
       icon,
@@ -493,6 +572,7 @@ class UniversalImage extends StatelessWidget {
     );
   }
 
+  /// Create image from memory bytes data
   Widget _createMemoryImage() {
     var data = imageUri.replaceAll(_memoryUriPrefix, ''); // remove prefix
     var bytes = base64Decode(data);
@@ -521,6 +601,9 @@ class UniversalImage extends StatelessWidget {
     );
   }
 
+  ///
+  /// Get color filter for svg base on `color` and `colorBlendMode`
+  ///
   ui.ColorFilter? _getColorFilter(
       ui.ColorFilter? filter, ui.Color? color, ui.BlendMode? colorBlendMode) {
     if (filter != null) {
@@ -534,6 +617,7 @@ class UniversalImage extends StatelessWidget {
     return null;
   }
 
+  /// Build widget
   @override
   Widget build(BuildContext context) {
     if (_isIcon) return _createIconImage();

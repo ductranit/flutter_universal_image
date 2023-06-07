@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
 
+/// Create svg image widget
 Widget svgFile(
   String imageUri, {
   Key? key,
@@ -20,6 +21,7 @@ Widget svgFile(
   throw UnsupportedError('File is not supported on web');
 }
 
+/// Create extended image widget
 Widget extendedImageFile(
   String imageUri, {
   Key? key,
@@ -51,11 +53,11 @@ Widget extendedImageFile(
   throw UnsupportedError('File is not supported on web');
 }
 
-Future<void> precacheSvgFile(String imageUri) async {
-  // do nothing on web
-}
+/// precache svg data
+/// but do nothing on web
+Future<void> precacheSvgFile(String imageUri) async {}
 
+/// precache extended image
+/// but do nothing on web
 Future<void> precacheExtendedImageFile(
-    BuildContext context, String imageUri) async {
-  // do nothing on web
-}
+    BuildContext context, String imageUri) async {}
