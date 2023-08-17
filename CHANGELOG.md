@@ -1,3 +1,7 @@
+## [1.0.0] - Support flutter 3.13.0 and refactor file io
+*  Update flutter_svg and extended_image
+*  Support flutter 3.13.0
+*  Refactor file io and remove universal_io
 ## [0.1.9] - Update libs
 *  Update universal_io and extended_image
 ## [0.1.8] - Support dart 3.0

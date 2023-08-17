@@ -1,1 +1,1 @@
-export '_file_io.dart' if (dart.library.html) '_web_io.dart';
+export '_image_file_io.dart' if (dart.library.html) '_image_web_io.dart';

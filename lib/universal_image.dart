@@ -5,7 +5,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:universal_io/io.dart';
+import 'platforms/file.dart';
 import 'dart:convert';
 import 'platforms/image_file.dart';
 
@@ -491,8 +491,9 @@ class UniversalImage extends StatelessWidget {
     }
 
     if (imageEngine == ImageEngine.defaultImage) {
+      dynamic file = File(imageUri);
       return Image.file(
-        File(imageUri),
+        file,
         key: key,
         fit: fit,
         scale: scale,
@@ -514,8 +515,9 @@ class UniversalImage extends StatelessWidget {
       );
     }
 
+    dynamic file = File(imageUri);
     return ExtendedImage.file(
-      File(imageUri),
+      file,
       key: key,
       fit: fit,
       scale: scale,
