@@ -1,15 +1,15 @@
 # universal_image
 [![pub package](https://img.shields.io/pub/v/universal_image.svg)](https://pub.dartlang.org/packages/universal_image)
 
-A universal image package to display all image types for all platforms (mobile, desktop and web)
+A comprehensive image package that provides a unified solution for displaying all major image formats across mobile, desktop, and web platforms in Flutter applications
 
-## General
+## Key Features
 
-- It does supports `JPEG`, `PNG`, `GIF`, `Animated GIF`, `WebP`, `Animated WebP`, `BMP`, and `WBMP` from [Image](https://api.flutter.dev/flutter/widgets/Image-class.html)
-- For `SVG`, it uses [flutter_svg](https://pub.dev/packages/flutter_svg)
-- It also supports caching image with [extended_image](https://pub.dev/packages/extended_image)
-- It can handle all providers without specifying network, assets or file, just use `imageUri`
-- It can work with Icons font & memory image as well
+- Supports a wide range of image formats, including JPEG, PNG, GIF, Animated GIF, WebP, Animated WebP, BMP, and WBMP from the built-in [Image](https://api.flutter.dev/flutter/widgets/Image-class.html) widget.
+- Seamless integration with [flutter_svg](https://pub.dev/packages/flutter_svg) for rendering SVG images.
+- Powerful caching capabilities with [extended_image](https://pub.dev/packages/extended_image) for optimal performance.
+- Streamlined usage with imageUri, eliminating the need to specify network, asset, or file paths separately.
+- Ability to work with Icons font and memory-based images.
 
 ## Example usage:
 
