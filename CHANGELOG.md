@@ -1,3 +1,5 @@
+## [1.0.0] - Update libs
+- Update flutter_svg and extended_image 
 ## [1.0.0] - Support flutter 3.13.0 and refactor file io
 *  Update flutter_svg and extended_image
 *  Support flutter 3.13.0
