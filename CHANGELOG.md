@@ -1,3 +1,5 @@
+## [1.0.3] - Change icon provider
+- Icon provider can start with UniversalImage(IconData) like other providers
 ## [1.0.2] - Update libs
 - Update flutter_svg and extended_image 
 - Increase minimum dart 3.0

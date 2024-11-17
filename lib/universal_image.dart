@@ -46,7 +46,7 @@ enum ImageEngine {
 ///
 /// `Network provider`: `UniversalImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg')`
 ///
-/// `Icon provider`: `UniversalImage.icon(Icons.add)`
+/// `Icon provider`: `UniversalImage(Icons.add)`
 ///
 /// `Memory provider`: `UniversalImage('base64://base64string')`
 class UniversalImage extends StatelessWidget {
@@ -54,53 +54,8 @@ class UniversalImage extends StatelessWidget {
   /// Create image widet base on uri
   ///
   const UniversalImage(
-    this.imageUri, {
+    this.imageSource, {
     Key? key,
-    this.scale = 1.0,
-    this.icon,
-    this.frameBuilder,
-    this.errorBuilder,
-    this.semanticLabel,
-    this.excludeFromSemantics = false,
-    this.width,
-    this.height,
-    this.color,
-    this.colorBlendMode,
-    this.fit,
-    this.alignment = Alignment.center,
-    this.repeat = ImageRepeat.noRepeat,
-    this.centerSlice,
-    this.matchTextDirection = false,
-    this.gaplessPlayback = false,
-    this.isAntiAlias = false,
-    this.filterQuality = FilterQuality.low,
-    this.cacheWidth,
-    this.cacheHeight,
-    this.allowDrawingOutsideViewBox = false,
-    this.svgSkiaMode = false,
-    this.size,
-    this.textDirection,
-    this.placeholder,
-    this.errorPlaceholder,
-    this.cache = true,
-    this.enableMemoryCache = true,
-    this.clearMemoryCacheIfFailed = true,
-    this.clearMemoryCacheWhenDispose = false,
-    this.assetPrefix = 'assets',
-    this.compressionRatio,
-    this.maxBytes,
-    this.imageEngine = ImageEngine.extendedImage,
-    this.heroTag,
-    this.colorFilter,
-  }) : super(key: key);
-
-  ///
-  /// Create image widet base on icon data
-  ///
-  UniversalImage.icon(
-    this.icon, {
-    Key? key,
-    this.imageUri = '',
     this.scale = 1.0,
     this.frameBuilder,
     this.errorBuilder,
@@ -136,7 +91,8 @@ class UniversalImage extends StatelessWidget {
     this.imageEngine = ImageEngine.extendedImage,
     this.heroTag,
     this.colorFilter,
-  }) : super(key: key);
+  })  : assert(imageSource is String || imageSource is IconData),
+        super(key: key);
 
   ///Represents the alignment of the image within its container.
   final Alignment alignment;
@@ -213,8 +169,8 @@ class UniversalImage extends StatelessWidget {
   /// An optional `ui.ColorFilter` property that sets the color filter of the image.
   final ui.ColorFilter? colorFilter;
 
-  /// Image uri, it can be http url, assets file path (assets path must start with `assets`) or local file
-  final String imageUri;
+  /// Image source, it can be http url, assets file path (assets path must start with `assets`), local file or icon data
+  final dynamic imageSource;
 
   /// A boolean property that determines whether the image should be anti-aliased. Default is `false`.
   final bool isAntiAlias;
@@ -237,9 +193,6 @@ class UniversalImage extends StatelessWidget {
   /// Indicates whether the image should be rendered using Skia for SVGs.
   final bool svgSkiaMode;
 
-  /// The icon data, if the resource is an icon.
-  final IconData? icon;
-
   /// The size of the icon, if the resource is an icon.
   final double? size;
 
@@ -258,11 +211,14 @@ class UniversalImage extends StatelessWidget {
   /// Checks if the image is an SVG.
   bool get _isSvg => imageUri.endsWith('.svg');
 
-  /// Checks if the resource is an icon.
-  bool get _isIcon => icon != null;
-
   /// Checks if the image is a memory image.
   bool get _isMemory => imageUri.startsWith(_memoryUriPrefix);
+
+  /// The URI string of the image.
+  String get imageUri => imageSource.toString();
+
+  /// The icon data, if the resource is an icon.
+  IconData? get icon => imageSource is IconData ? imageSource : null;
 
   /// Create svg image widget.
   ///
@@ -622,10 +578,15 @@ class UniversalImage extends StatelessWidget {
   /// Build widget
   @override
   Widget build(BuildContext context) {
-    if (_isIcon) return _createIconImage();
-    if (_isSvg) return _createSvgImage();
-    if (_isMemory) return _createMemoryImage();
-    return _createOtherImage();
+    if (imageSource is String) {
+      if (_isSvg) return _createSvgImage();
+      if (_isMemory) return _createMemoryImage();
+      return _createOtherImage();
+    } else if (imageSource is IconData) {
+      return _createIconImage();
+    }
+
+    throw Exception('Unsupported image type ${imageSource.runtimeType}');
   }
 
   /// Clear cache from memory and disk

@@ -102,7 +102,7 @@ var image = UniversalImage(
 
 - Icon provider:
 ```
-var image = UniversalImage.icon(
+var image = UniversalImage(
       Icons.add,
       color: Colors.black,
       size: 30,

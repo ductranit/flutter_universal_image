@@ -11,11 +11,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter UniversalImage',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Demo UniversalImage'),
     );
   }
 }
@@ -47,10 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // icon provider
-              UniversalImage.icon(
-                Icons.access_alarm,
-                color: Colors.yellow,
+              UniversalImage(
+                Icons.schedule,
+                color: Colors.red,
               ),
+              SizedBox(height: 20),
               // svg provider
               UniversalImage(
                 'assets/sample.svg',
@@ -58,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 30,
                 fit: BoxFit.cover,
               ),
+              SizedBox(height: 20),
               // normal provider
               UniversalImage(
                 'assets/sample.png',
@@ -66,7 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 fit: BoxFit.cover,
                 placeholder: Container(),
               ),
+              SizedBox(height: 20),
 
+              // memory provider
               FutureBuilder<String>(
                 future: _loadImage(),
                 builder: (context, snapshot) {
