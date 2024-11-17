@@ -30,14 +30,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<String> _loadImage() async {
+  Future<String> _loadBase64Image() async {
     var bytes =
         (await rootBundle.load('assets/sample.png')).buffer.asUint8List();
     return bytes.uri;
   }
 
+  Future<Uint8List> _loadBytesImage() async {
+    var bytes =
+        (await rootBundle.load('assets/sample.png')).buffer.asUint8List();
+    return bytes;
+  }
+
   @override
   Widget build(BuildContext context) {
+    const space = 10.0;
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -51,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Icons.schedule,
                 color: Colors.red,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: space),
               // svg provider
               UniversalImage(
                 'assets/sample.svg',
@@ -59,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 30,
                 fit: BoxFit.cover,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: space),
               // normal provider
               UniversalImage(
                 'assets/sample.png',
@@ -68,14 +75,29 @@ class _MyHomePageState extends State<MyHomePage> {
                 fit: BoxFit.cover,
                 placeholder: Container(),
               ),
-              SizedBox(height: 20),
-
-              // memory provider
+              SizedBox(height: space),
+              // base64 provider
               FutureBuilder<String>(
-                future: _loadImage(),
+                future: _loadBase64Image(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    // memory provider
+                    return UniversalImage(
+                      snapshot.data!,
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    );
+                  }
+
+                  return Container();
+                },
+              ),
+              SizedBox(height: space),
+              // memory bytes provider
+              FutureBuilder<Uint8List>(
+                future: _loadBytesImage(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
                     return UniversalImage(
                       snapshot.data!,
                       width: 100,

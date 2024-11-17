@@ -10,11 +10,11 @@ import 'dart:convert';
 import 'platforms/image_file.dart';
 
 /// The prefix of memory data
-const String _memoryUriPrefix = 'base64://';
+const String _base64UriPrefix = 'base64://';
 
 extension $Uint8List on Uint8List {
   /// Convert bytes array into uri
-  String get uri => '$_memoryUriPrefix${base64Encode(this)}';
+  String get uri => '$_base64UriPrefix${base64Encode(this)}';
 }
 
 /// Image loader engine. By default its use `flutter_svg` for svg file, flutter image for memory or icon and use extended_image for the rest
@@ -91,7 +91,9 @@ class UniversalImage extends StatelessWidget {
     this.imageEngine = ImageEngine.extendedImage,
     this.heroTag,
     this.colorFilter,
-  })  : assert(imageSource is String || imageSource is IconData),
+  })  : assert(imageSource is String ||
+            imageSource is IconData ||
+            imageSource is Uint8List),
         super(key: key);
 
   ///Represents the alignment of the image within its container.
@@ -211,8 +213,8 @@ class UniversalImage extends StatelessWidget {
   /// Checks if the image is an SVG.
   bool get _isSvg => imageUri.endsWith('.svg');
 
-  /// Checks if the image is a memory image.
-  bool get _isMemory => imageUri.startsWith(_memoryUriPrefix);
+  /// Checks if the image is a base64 memory image.
+  bool get _isBase64 => imageUri.startsWith(_base64UriPrefix);
 
   /// The URI string of the image.
   String get imageUri => imageSource.toString();
@@ -530,10 +532,38 @@ class UniversalImage extends StatelessWidget {
     );
   }
 
-  /// Create image from memory bytes data
-  Widget _createMemoryImage() {
-    var data = imageUri.replaceAll(_memoryUriPrefix, ''); // remove prefix
+  /// Create image from base64 data
+  Widget _createBase64Image() {
+    var data = imageUri.replaceAll(_base64UriPrefix, ''); // remove prefix
     var bytes = base64Decode(data);
+    return Image.memory(
+      bytes,
+      key: key,
+      fit: fit,
+      scale: scale,
+      color: color,
+      width: width,
+      height: height,
+      alignment: alignment,
+      filterQuality: filterQuality,
+      colorBlendMode: colorBlendMode,
+      isAntiAlias: isAntiAlias,
+      repeat: repeat,
+      centerSlice: centerSlice,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      semanticLabel: semanticLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      matchTextDirection: matchTextDirection,
+      gaplessPlayback: gaplessPlayback,
+      cacheWidth: cacheWidth,
+      cacheHeight: cacheHeight,
+    );
+  }
+
+  /// Create image from memory image
+  Widget _createMemoryImage() {
+    Uint8List bytes = imageSource;
     return Image.memory(
       bytes,
       key: key,
@@ -580,10 +610,12 @@ class UniversalImage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (imageSource is String) {
       if (_isSvg) return _createSvgImage();
-      if (_isMemory) return _createMemoryImage();
+      if (_isBase64) return _createBase64Image();
       return _createOtherImage();
     } else if (imageSource is IconData) {
       return _createIconImage();
+    } else if (imageSource is Uint8List) {
+      return _createMemoryImage();
     }
 
     throw Exception('Unsupported image type ${imageSource.runtimeType}');

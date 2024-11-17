@@ -1,3 +1,5 @@
+## [1.0.4] - Add byte provider
+- Add bytes memory provider
 ## [1.0.3] - Change icon provider
 - Icon provider can start with UniversalImage(IconData) like other providers
 ## [1.0.2] - Update libs
