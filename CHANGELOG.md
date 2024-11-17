@@ -1,4 +1,7 @@
-## [1.0.0] - Update libs
+## [1.0.2] - Update libs
+- Update flutter_svg and extended_image 
+- Increase minimum dart 3.0
+## [1.0.1] - Update libs
 - Update flutter_svg and extended_image 
 ## [1.0.0] - Support flutter 3.13.0 and refactor file io
 *  Update flutter_svg and extended_image
