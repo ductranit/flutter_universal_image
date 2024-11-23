@@ -1,3 +1,5 @@
+## [1.0.5] - Update base64 provider
+- Support standard base64 image source
 ## [1.0.4] - Add byte provider
 - Add bytes memory provider
 ## [1.0.3] - Change icon provider

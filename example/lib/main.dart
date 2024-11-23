@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<String> _loadBase64Image() async {
     var bytes =
         (await rootBundle.load('assets/sample.png')).buffer.asUint8List();
-    return bytes.uri;
+    return bytes.base64Image;
   }
 
   Future<Uint8List> _loadBytesImage() async {

@@ -10,12 +10,7 @@ import 'dart:convert';
 import 'platforms/image_file.dart';
 
 /// The prefix of memory data
-const String _base64UriPrefix = 'base64://';
-
-extension $Uint8List on Uint8List {
-  /// Convert bytes array into uri
-  String get uri => '$_base64UriPrefix${base64Encode(this)}';
-}
+const String _base64UriPrefix = 'data:image/';
 
 /// Image loader engine. By default its use `flutter_svg` for svg file, flutter image for memory or icon and use extended_image for the rest
 enum ImageEngine {
@@ -534,8 +529,8 @@ class UniversalImage extends StatelessWidget {
 
   /// Create image from base64 data
   Widget _createBase64Image() {
-    var data = imageUri.replaceAll(_base64UriPrefix, ''); // remove prefix
-    var bytes = base64Decode(data);
+    var data = imageUri;
+    var bytes = data.base64Bytes;
     return Image.memory(
       bytes,
       key: key,
@@ -652,4 +647,113 @@ class UniversalImage extends StatelessWidget {
       }
     }
   }
+}
+
+extension $Uint8List on Uint8List {
+  /// Convert bytes array into base64 image
+  String get base64Image {
+    final base64String = base64Encode(this);
+    final format = _detectFormat(this);
+    return 'data:${format};base64,$base64String';
+  }
+}
+
+extension $String on String {
+  /// Convert base64 image into bytes array
+  Uint8List get base64Bytes {
+    String normalizedString = this;
+    if (normalizedString.contains(',')) {
+      normalizedString = normalizedString.split(',')[1];
+    }
+    return base64Decode(normalizedString);
+  }
+}
+
+/// Detect the MIME type of an image from its bytes.
+///
+/// Supports the following formats:
+///
+/// * JPEG
+/// * PNG
+/// * GIF
+/// * WebP
+/// * BMP
+/// * TIFF (Intel and Motorola)
+/// * ICO
+///
+/// If the format is not recognized, returns 'image/unknown'.
+String _detectFormat(Uint8List bytes) {
+  if (bytes.length < 12) {
+    return 'image/unknown';
+  }
+
+  // Check for JPEG
+  if (bytes[0] == 0xFF && bytes[1] == 0xD8 && bytes[2] == 0xFF) {
+    return 'image/jpeg';
+  }
+
+  // Check for PNG
+  if (bytes[0] == 0x89 &&
+      bytes[1] == 0x50 && // P
+      bytes[2] == 0x4E && // N
+      bytes[3] == 0x47 && // G
+      bytes[4] == 0x0D && // CR
+      bytes[5] == 0x0A && // LF
+      bytes[6] == 0x1A && // EOF
+      bytes[7] == 0x0A) {
+    // LF
+    return 'image/png';
+  }
+
+  // Check for GIF
+  if (bytes[0] == 0x47 && // G
+      bytes[1] == 0x49 && // I
+      bytes[2] == 0x46 && // F
+      bytes[3] == 0x38 && // 8
+      (bytes[4] == 0x37 || bytes[4] == 0x39) && // 7 or 9
+      bytes[5] == 0x61) {
+    return 'image/gif';
+  }
+
+  // Check for WebP
+  if (bytes.length > 12 &&
+      bytes[8] == 0x57 && // W
+      bytes[9] == 0x45 && // E
+      bytes[10] == 0x42 && // B
+      bytes[11] == 0x50) {
+    // P
+    return 'image/webp';
+  }
+
+  // Check for BMP
+  if (bytes[0] == 0x42 && bytes[1] == 0x4D) {
+    // BM
+    return 'image/bmp';
+  }
+
+  // Check for TIFF (Intel)
+  if (bytes[0] == 0x49 &&
+      bytes[1] == 0x49 &&
+      bytes[2] == 0x2A &&
+      bytes[3] == 0x00) {
+    return 'image/tiff';
+  }
+
+  // Check for TIFF (Motorola)
+  if (bytes[0] == 0x4D &&
+      bytes[1] == 0x4D &&
+      bytes[2] == 0x00 &&
+      bytes[3] == 0x2A) {
+    return 'image/tiff';
+  }
+
+  // Check for ICO
+  if (bytes[0] == 0x00 &&
+      bytes[1] == 0x00 &&
+      bytes[2] == 0x01 &&
+      bytes[3] == 0x00) {
+    return 'image/x-icon';
+  }
+
+  return 'image/unknown';
 }
