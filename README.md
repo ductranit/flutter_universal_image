@@ -1,7 +1,8 @@
 # universal_image
 [![pub package](https://img.shields.io/pub/v/universal_image.svg)](https://pub.dartlang.org/packages/universal_image)
 
-A comprehensive image package that provides a unified solution for displaying all major image formats across mobile, desktop, and web platforms in Flutter applications
+
+A comprehensive image package that provides a unified solution for displaying all major image formats across mobile, desktop, and web platforms in Flutter applications.\
 Skip the hassle of Image.network(), Image.asset(), or Image.memory() - simply pass your image source and let UniversalImage handle the rest
 
 ## Key Features
@@ -114,8 +115,9 @@ var image = UniversalImage(
 - Base64 provider:
 ```
 Uint8List data = await loadImage();
+var base64String = data.base64Image; // or replace any base64 image string 
 var image = UniversalImage(
-      data.base64Image,
+      base64String,
       color: Colors.black,
       matchTextDirection: false,
       scale: 1.0,
