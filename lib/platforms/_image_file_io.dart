@@ -60,7 +60,6 @@ Widget extendedImageFile(
   int? cacheWidth,
   int? cacheHeight,
   Widget? errorPlaceholder,
-  bool enableMemoryCache = true,
   bool clearMemoryCacheIfFailed = true,
   bool clearMemoryCacheWhenDispose = false,
   int? maxBytes,
@@ -98,7 +97,6 @@ Widget extendedImageFile(
             }
           }
         : null,
-    enableMemoryCache: enableMemoryCache,
     clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
     clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
     maxBytes: maxBytes,

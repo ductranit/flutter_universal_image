@@ -77,7 +77,6 @@ class UniversalImage extends StatelessWidget {
     this.placeholder,
     this.errorPlaceholder,
     this.cache = true,
-    this.enableMemoryCache = true,
     this.clearMemoryCacheIfFailed = true,
     this.clearMemoryCacheWhenDispose = false,
     this.assetPrefix = 'assets',
@@ -141,9 +140,6 @@ class UniversalImage extends StatelessWidget {
 
   /// A boolean property that determines whether the image should be cached. Default is `true`.
   final bool cache;
-
-  /// A boolean property that determines whether the memory cache is enabled. Default is `true`.
-  final bool enableMemoryCache;
 
   /// A boolean property that determines whether to clear the memory cache if the image fails to load. Default is `true`.
   final bool clearMemoryCacheIfFailed;
@@ -334,7 +330,6 @@ class UniversalImage extends StatelessWidget {
                 }
               }
             : null,
-        enableMemoryCache: enableMemoryCache,
         clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
         maxBytes: maxBytes,
@@ -417,7 +412,6 @@ class UniversalImage extends StatelessWidget {
               }
             : null,
         cache: cache,
-        enableMemoryCache: enableMemoryCache,
         clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
         maxBytes: maxBytes,
@@ -489,7 +483,6 @@ class UniversalImage extends StatelessWidget {
       gaplessPlayback: gaplessPlayback,
       cacheWidth: cacheWidth,
       cacheHeight: cacheHeight,
-      enableMemoryCache: enableMemoryCache,
       clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
       clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
       maxBytes: maxBytes,
