@@ -1,3 +1,5 @@
+## [1.0.7] - Refactor code
+- Refactor project structure 
 ## [1.0.6] - Update libs
 - Update flutter_svg and extended_image 
 ## [1.0.5] - Update base64 provider
