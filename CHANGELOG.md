@@ -1,3 +1,5 @@
+## [1.0.8] - Make the package WASM compatible
+- Update the conditional imports to make the package WASM compatible
 ## [1.0.7] - Refactor code
 - Refactor project structure 
 ## [1.0.6] - Update libs
