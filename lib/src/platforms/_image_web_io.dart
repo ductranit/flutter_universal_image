@@ -44,7 +44,6 @@ Widget extendedImageFile(
   int? cacheWidth,
   int? cacheHeight,
   Widget? errorPlaceholder,
-  bool enableMemoryCache = true,
   bool clearMemoryCacheIfFailed = true,
   bool clearMemoryCacheWhenDispose = false,
   int? maxBytes,
