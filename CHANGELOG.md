@@ -1,3 +1,5 @@
+## [1.0.10] - Update libs
+- Update flutter_svg and extended_image
 ## [1.0.9] - Update libs
 - Update extended_image
 ## [1.0.8] - Make the package WASM compatible
