@@ -1,3 +1,5 @@
+## [1.0.11] - Update libs
+- Update flutter_svg
 ## [1.0.10] - Update libs
 - Update flutter_svg and extended_image
 ## [1.0.9] - Update libs
