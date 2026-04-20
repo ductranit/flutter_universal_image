@@ -83,6 +83,7 @@ class UniversalImage extends StatelessWidget {
     this.imageEngine = ImageEngine.extendedImage,
     this.heroTag,
     this.colorFilter,
+    this.loadStateChanged,
   })  : assert(imageSource is String ||
             imageSource is IconData ||
             imageSource is Uint8List),
@@ -211,6 +212,9 @@ class UniversalImage extends StatelessWidget {
   /// The icon data, if the resource is an icon.
   IconData? get icon => imageSource is IconData ? imageSource : null;
 
+  /// A callback function that is called when the load state of the image changes. It takes an `ExtendedImageState` as a parameter and returns a `Widget?`.
+  final LoadStateChanged? loadStateChanged;
+
   /// Create svg image widget.
   ///
   /// For web (without skia enable), it uses [Image](https://api.flutter.dev/flutter/widgets/Image-class.html)
@@ -316,18 +320,19 @@ class UniversalImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight,
-        loadStateChanged: placeholder != null
-            ? (ExtendedImageState state) {
-                switch (state.extendedImageLoadState) {
-                  case LoadState.loading:
-                    return placeholder;
-                  case LoadState.failed:
-                    return errorPlaceholder ?? placeholder;
-                  default:
-                    return null;
-                }
-              }
-            : null,
+        loadStateChanged: loadStateChanged ??
+            (placeholder != null
+                ? (ExtendedImageState state) {
+                    switch (state.extendedImageLoadState) {
+                      case LoadState.loading:
+                        return placeholder;
+                      case LoadState.failed:
+                        return errorPlaceholder ?? placeholder;
+                      default:
+                        return null;
+                    }
+                  }
+                : null),
         clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
         maxBytes: maxBytes,
@@ -397,18 +402,19 @@ class UniversalImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback,
         cacheWidth: cacheWidth,
         cacheHeight: cacheHeight,
-        loadStateChanged: placeholder != null
-            ? (ExtendedImageState state) {
-                switch (state.extendedImageLoadState) {
-                  case LoadState.loading:
-                    return placeholder;
-                  case LoadState.failed:
-                    return errorPlaceholder ?? placeholder;
-                  default:
-                    return null;
-                }
-              }
-            : null,
+        loadStateChanged: loadStateChanged ??
+            (placeholder != null
+                ? (ExtendedImageState state) {
+                    switch (state.extendedImageLoadState) {
+                      case LoadState.loading:
+                        return placeholder;
+                      case LoadState.failed:
+                        return errorPlaceholder ?? placeholder;
+                      default:
+                        return null;
+                    }
+                  }
+                : null),
         cache: cache,
         clearMemoryCacheIfFailed: clearMemoryCacheIfFailed,
         clearMemoryCacheWhenDispose: clearMemoryCacheWhenDispose,
@@ -503,6 +509,7 @@ class UniversalImage extends StatelessWidget {
               );
             }
           : null,
+      loadStateChanged: loadStateChanged,
     );
   }
 

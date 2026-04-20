@@ -1,3 +1,5 @@
+## [1.0.12] - Update libs
+- Update flutter_svg
 ## [1.0.11] - Update libs
 - Update flutter_svg
 ## [1.0.10] - Update libs
